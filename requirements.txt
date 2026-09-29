@@ -1,0 +1,10 @@
+pandas>=2.2,<3
+numpy>=1.26,<3
+PyYAML>=6.0
+python-dotenv>=1.0
+matplotlib>=3.8
+pytest>=8.0
+streamlit>=1.35
+plotly>=5.20
+# MT5 is required only for live execution on supported Windows environments.
+MetaTrader5>=5.0.45; platform_system == "Windows"

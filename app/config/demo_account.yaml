@@ -1,0 +1,24 @@
+# Safe execution profile: no credentials.
+symbol: EURUSD
+account_currency: USD
+execution_mode: paper
+backtest:
+  profile: broker_realistic
+  starting_equity: 17.65
+  leverage: 100
+  volume_min: 0.01
+  volume_step: 0.01
+  required_filling_mode: FOK
+risk:
+  max_open_positions: 1
+  percent: 1.0
+  max_risk_percent: 3.0
+  max_min_volume_risk_percent: 3.0
+
+execution:
+  max_positions_per_symbol: 1
+  allow_hedging: false
+  allow_opposite_entry: false
+  signal_cooldown_seconds: 30
+  order_lock_timeout_seconds: 10
+  guard_db_path: runtime/execution_guard.sqlite3

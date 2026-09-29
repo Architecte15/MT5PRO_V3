@@ -1,0 +1,157 @@
+symbol: EURUSD
+# Major FX pairs supported for live/demo scanning. Set TRADING_SYMBOLS to override.
+symbols:
+  - EURUSD
+  - GBPUSD
+  - USDJPY
+  - USDCHF
+  - AUDUSD
+  - USDCAD
+  - NZDUSD
+higher_timeframe: H4
+entry_timeframe: M5
+strategy_id: PY-PA-001
+point_size: 0.00001
+account_currency: USD
+execution_mode: live
+
+risk:
+  percent: 1.0
+  max_open_positions: 1
+  max_sl_points: 500
+  max_spread_points: 30
+  daily_loss_limit_percent: 3.0
+  reward_risk: 2.0
+  sl_buffer_points: 5
+  use_equity: true
+  compound: true
+  max_risk_percent: 3.0
+  allow_min_volume_if_affordable: true
+  max_min_volume_risk_percent: 3.0
+  circuit_breaker_reduce_after_losses: 4
+  circuit_breaker_pause_after_losses: 8
+  circuit_breaker_min_multiplier: 0.25
+  circuit_breaker_cooldown_bars: 3
+
+strategy:
+  minimum_confirmation_score: 7
+  breakout_buffer_points: 10
+  retest_tolerance_points: 20
+  max_retest_bars: 10
+  max_confirmation_bars: 5
+  swing_lookback: 3
+  swing_strength: 2
+  allow_counter_trend_trades: false
+  use_higher_timeframe_filter: true
+  close_on_opposite_signal: false
+  max_signal_age_bars: 50
+
+indicators:
+  ema_period: 200
+  bollinger_period: 20
+  bollinger_deviation: 2
+  rsi_period: 14
+  rsi_overbought: 70
+  rsi_oversold: 30
+  macd_fast: 12
+  macd_slow: 26
+  macd_signal: 9
+  squeeze_lookback: 50
+  squeeze_threshold: 0.08
+  minimum_squeeze_candles: 5
+  momentum_factor: 1.8
+  wick_ratio: 2.0
+  divergence_lookback: 30
+
+session:
+  enabled: false
+  start: "07:00"
+  end: "21:00"
+  timezone: UTC
+
+execution:
+  max_positions_per_symbol: 1
+  max_total_open_positions: 3
+  allow_hedging: false
+  allow_opposite_entry: false
+  signal_cooldown_seconds: 30
+  order_lock_timeout_seconds: 10
+  guard_db_path: runtime/execution_guard.sqlite3
+  live_strategy: adaptive_multi_symbol
+  require_demo_account: true
+  allowed_demo_server: MetaQuotes-Demo
+  max_trades_per_day: 12
+  min_minutes_between_trades: 5.0
+  scan_all_configured_symbols: true
+  skip_unavailable_symbols: true
+
+position_management:
+  enable_break_even: true
+  break_even_trigger_points: 100
+  break_even_offset_points: 2
+  enable_trailing_stop: true
+  trailing_stop_points: 120
+  enable_partial_close: false
+  partial_close_percent: 50
+  partial_close_trigger_rr: 1.0
+
+
+backtest:
+  profile: broker_realistic
+  max_open_positions: 1
+  starting_equity: 17.65
+  leverage: 100
+  volume_min: 0.01
+  volume_max: 100
+  volume_step: 0.01
+  tick_size: 0.00001
+  tick_value: 1.0
+  contract_size: 100000
+  commission_per_lot: 0.0
+  slippage_points: 0.0
+  margin_per_lot: null
+  required_filling_mode: FOK
+
+# Experimental Liquidity Flow research model. It never gates live trading by default.
+liquidity_flow:
+  enabled: false
+  signal_gate_enabled: false
+  paper_only: true
+  feature_version: LF-1.0
+  swing_strength: 2
+  zone_tolerance_points: 15
+  displacement_weak_body_atr: 0.5
+  displacement_moderate_body_atr: 1.0
+  displacement_strong_body_atr: 1.5
+  outcome_horizon_bars: 12
+  min_samples: 100
+  drift_psi_threshold: 0.25
+  use_ema13_feature: true
+
+# Persistent adaptive market-memory layer. It learns from CLOSED outcomes only.
+adaptive_learning:
+  enabled: true
+  opportunity_scan_enabled: true
+  memory_db_path: runtime/adaptive_memory.sqlite3
+  min_samples: 20
+  min_lower_confidence: 0.48
+  min_risk_multiplier: 0.35
+  max_risk_multiplier: 1.0
+  cold_start_allowed: true
+  learn_after_close_only: true
+  model_version: ADAPTIVE-1.0
+
+# Experimental first-4H-range / M5 re-entry strategy.
+# It is research/paper-only by default and never gates LIVE trading.
+four_hour_range:
+  enabled: true
+  timezone: America/New_York
+  range_timeframe: H4
+  entry_timeframe: M5
+  max_sl_points: 500
+  fallback_sl_enabled: true
+  swing_strength: 2
+  allow_multiple_per_day: true
+  risk_reward: 2.0
+  signal_gate_enabled: true
+  paper_only: false

@@ -1,0 +1,4558 @@
+{
+  "meta": {
+    "generated_at": "2026-09-23T19:04:20.299858+00:00",
+    "prereg_hash": "bab77edeb31f2eb4",
+    "protocol": {
+      "hypothesis_version": "1.0",
+      "feature_version": "11-obs-v1",
+      "entry_rule": "signal on closed bar; fill at next open; SL-first if both touched",
+      "direction_rule": "reversion: sell-side swept -> BUY; buy-side swept -> SELL",
+      "sl_buffer_points": 5,
+      "rr": 2.0,
+      "atr_mult": 1.5,
+      "horizon_bars": 96,
+      "min_trades_oos": 30,
+      "train_frac": 0.6,
+      "val_frac": 0.2,
+      "oos_frac": 0.1,
+      "holdout_frac": 0.1,
+      "walk_forward_folds": 4,
+      "control_draws": 100,
+      "control_seed": 1337,
+      "min_train_trades_for_grid_selection": 15
+    },
+    "displacement_selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params",
+    "control_draws": 100,
+    "runner": "scripts/run_liquidity_research.py",
+    "live_engine_modified": false
+  },
+  "data": {
+    "m15_bars": 16481,
+    "m15_range": [
+      "2026-01-02T00:00:00+00:00",
+      "2026-09-01T00:00:00+00:00"
+    ],
+    "h4_bars": 1165,
+    "h4_range": [
+      "2025-12-01T00:00:00+00:00",
+      "2026-09-01T00:00:00+00:00"
+    ],
+    "n_zones": 4790,
+    "n_sweeps": 4256,
+    "n_confirmed": 3220,
+    "n_structure_events": 1528,
+    "eligible_signal_bars": 16355
+  },
+  "hypotheses": {
+    "H1": {
+      "hypothesis": {
+        "id": "H1",
+        "title": "Confirmed liquidity sweep alone",
+        "components": [
+          "sweep"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": null,
+        "require_bos_window": null,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": false,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 3213,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 0,
+        "skip_bos": 0,
+        "skip_ema13": 0,
+        "skip_htf_align": 0,
+        "skip_tail": 2,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 5,
+        "built": 3213
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": -0.028389999999969717,
+        "train_pf": 0.9255410526316267,
+        "validation_pf": 0.9001750256503601,
+        "holdout_pf": 1.2019765287214315,
+        "flag": "STABILITY_CONCERN: train/validation PF < 1 — edge concentrated in the most recent period, likely regime; deployment NOT recommended"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T07:45:00+00:00",
+        "train_end": "2026-05-27T07:36:00+00:00",
+        "validation_end": "2026-07-14T15:33:00+00:00",
+        "oos_end": "2026-08-07T19:31:30+00:00",
+        "t1": "2026-08-31T23:30:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 1934,
+          "wins": 696,
+          "losses": 1238,
+          "win_rate": 0.35987590486039295,
+          "expectancy": -2.2859358841768866e-05,
+          "gross_profit": 0.5495400000001438,
+          "gross_loss": 0.5937500000001248,
+          "profit_factor": 0.9255410526316267,
+          "payoff": 1.646292849364876,
+          "max_drawdown": 0.12347000000000863,
+          "avg_mfe": 0.0007114374353671156,
+          "avg_mae": 0.0005800723888314375,
+          "avg_bars_held": 4.968976215098242,
+          "sl_exits": 1233,
+          "tp_exits": 679,
+          "time_exits": 22,
+          "expectancy_ci95": [
+            -6.204782833505731e-05,
+            1.4803903826278144e-05
+          ],
+          "expectancy_usd_001lot": -0.022859358841768866
+        },
+        "validation": {
+          "n": 652,
+          "wins": 234,
+          "losses": 418,
+          "win_rate": 0.3588957055214724,
+          "expectancy": -2.5368098159503412e-05,
+          "gross_profit": 0.14915000000004786,
+          "gross_loss": 0.16569000000004408,
+          "profit_factor": 0.9001750256503601,
+          "payoff": 1.6080049603497886,
+          "max_drawdown": 0.028229999999998423,
+          "avg_mfe": 0.0005993711656441741,
+          "avg_mae": 0.00047357361963190045,
+          "avg_bars_held": 5.142638036809816,
+          "sl_exits": 418,
+          "tp_exits": 233,
+          "time_exits": 1,
+          "expectancy_ci95": [
+            -7.392944785275678e-05,
+            2.4696319018425648e-05
+          ],
+          "expectancy_usd_001lot": -0.025368098159503413
+        },
+        "oos": {
+          "n": 327,
+          "wins": 124,
+          "losses": 203,
+          "win_rate": 0.37920489296636084,
+          "expectancy": 6.896024464832912e-05,
+          "gross_profit": 0.08252000000002502,
+          "gross_loss": 0.059970000000021395,
+          "profit_factor": 1.3760213440052622,
+          "payoff": 2.252680103492486,
+          "max_drawdown": 0.009000000000000563,
+          "avg_mfe": 0.0005223241590214171,
+          "avg_mae": 0.0003676146788990844,
+          "avg_bars_held": 4.538226299694189,
+          "sl_exits": 202,
+          "tp_exits": 124,
+          "time_exits": 1,
+          "expectancy_ci95": [
+            3.7729357798185e-06,
+            0.00013700840978596445
+          ],
+          "expectancy_usd_001lot": 0.06896024464832912
+        },
+        "holdout": {
+          "n": 300,
+          "wins": 117,
+          "losses": 183,
+          "win_rate": 0.39,
+          "expectancy": 3.2700000000012904e-05,
+          "gross_profit": 0.05838000000002341,
+          "gross_loss": 0.04857000000001954,
+          "profit_factor": 1.2019765287214315,
+          "payoff": 1.8800145705642903,
+          "max_drawdown": 0.007190000000002694,
+          "avg_mfe": 0.0004419333333333353,
+          "avg_mae": 0.00030703333333333675,
+          "avg_bars_held": 5.8933333333333335,
+          "sl_exits": 182,
+          "tp_exits": 114,
+          "time_exits": 4,
+          "expectancy_ci95": [
+            -1.6037500000006563e-05,
+            8.100083333336004e-05
+          ],
+          "expectancy_usd_001lot": 0.032700000000012906
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 421,
+            "expectancy": 3.325415677081616e-07,
+            "pf": 1.0013037809648453
+          },
+          {
+            "fold": "fold2",
+            "n": 383,
+            "expectancy": 9.6631853785928e-05,
+            "pf": 1.4456351595424468
+          },
+          {
+            "fold": "fold3",
+            "n": 419,
+            "expectancy": -2.2410501193304727e-05,
+            "pf": 0.9147293861242979
+          },
+          {
+            "fold": "fold4",
+            "n": 409,
+            "expectancy": 3.105134474328535e-05,
+            "pf": 1.1466512702078502
+          }
+        ],
+        "positive": 3,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -1.5110633316512769e-05,
+          "p95_expectancy": 7.014639259842991e-05,
+          "share_draws_ge_real": 0.06,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -1.5844616084617437e-05,
+          "p95_expectancy": 9.836642968724135e-05,
+          "share_draws_ge_real": 0.12,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -1.5110633316512769e-05,
+      "verdict": "CANDIDATE (holdout + manual approval required; auto-deploy forbidden)",
+      "verdict_reasons": [
+        "all gates passed"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 309,
+          "expectancy": 7.57605177993669e-05,
+          "pf": 1.3137649108698317,
+          "win_rate": 0.39805825242718446
+        },
+        "RANGE": {
+          "n": 609,
+          "expectancy": 8.62068965518696e-06,
+          "pf": 1.0274825943569483,
+          "win_rate": 0.3793103448275862
+        },
+        "STRONG_DOWNTREND": {
+          "n": 1156,
+          "expectancy": -2.1626297577848833e-05,
+          "pf": 0.9163095875736915,
+          "win_rate": 0.3624567474048443
+        },
+        "STRONG_UPTREND": {
+          "n": 922,
+          "expectancy": 1.2711496746217821e-05,
+          "pf": 1.0519296379990677,
+          "win_rate": 0.3676789587852495
+        },
+        "UPTREND": {
+          "n": 217,
+          "expectancy": -0.0002017050691244356,
+          "pf": 0.4383421018863834,
+          "win_rate": 0.271889400921659
+        }
+      },
+      "by_displacement": {
+        "": {
+          "n": 3213,
+          "expectancy": -8.83597883596941e-06,
+          "pf": 0.9672918730846761,
+          "win_rate": 0.3644568938686586
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 965,
+          "expectancy": -2.93782383419605e-05,
+          "pf": 0.8917029566812403,
+          "win_rate": 0.34300518134715025
+        },
+        "BULLISH": {
+          "n": 912,
+          "expectancy": 1.1984649122813465e-05,
+          "pf": 1.0482496799541035,
+          "win_rate": 0.375
+        },
+        "NEUTRAL": {
+          "n": 1336,
+          "expectancy": -8.211077844299188e-06,
+          "pf": 0.9711064872126288,
+          "win_rate": 0.3727544910179641
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H1",
+          "signal_index": 30,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T07:45:00+00:00",
+          "exit_time": "2026-01-02T07:45:00+00:00",
+          "entry": 1.1756,
+          "exit": 1.17518,
+          "sl": 1.17581,
+          "tp": 1.17518,
+          "pnl": 0.00042000000000008697,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.0005399999999999849,
+          "mae": 5.0000000000105516e-05,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 7
+        },
+        {
+          "hypothesis": "H1",
+          "signal_index": 30,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T07:45:00+00:00",
+          "exit_time": "2026-01-02T07:45:00+00:00",
+          "entry": 1.1756,
+          "exit": 1.17518,
+          "sl": 1.17581,
+          "tp": 1.17518,
+          "pnl": 0.00042000000000008697,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.0005399999999999849,
+          "mae": 5.0000000000105516e-05,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17532,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 7
+        },
+        {
+          "hypothesis": "H1",
+          "signal_index": 33,
+          "sweep_index": 33,
+          "direction": 1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T08:30:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17427,
+          "sl": 1.17427,
+          "tp": 1.1745100000000002,
+          "pnl": -8.000000000008001e-05,
+          "reason": "SL",
+          "bars_held": 1,
+          "mfe": 5.999999999994898e-05,
+          "mae": 0.00021000000000004349,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17442,
+          "pierce_atr": 1.212805716051776,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H1",
+          "signal_index": 16458,
+          "sweep_index": 16458,
+          "direction": -1,
+          "entry_time": "2026-08-31T18:45:00+00:00",
+          "exit_time": "2026-08-31T18:45:00+00:00",
+          "entry": 1.16176,
+          "exit": 1.16205,
+          "sl": 1.16205,
+          "tp": 1.1611799999999997,
+          "pnl": -0.0002900000000001235,
+          "reason": "SL",
+          "bars_held": 1,
+          "mfe": 0.00019999999999997797,
+          "mae": 0.000320000000000098,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16182,
+          "pierce_atr": 0.6884316682812724,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 18
+        },
+        {
+          "hypothesis": "H1",
+          "signal_index": 16475,
+          "sweep_index": 16475,
+          "direction": -1,
+          "entry_time": "2026-08-31T23:00:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.16164,
+          "exit": 1.1617,
+          "sl": 1.16188,
+          "tp": 1.16116,
+          "pnl": -5.999999999994898e-05,
+          "reason": "TIME",
+          "bars_held": 5,
+          "mfe": 0.000220000000000109,
+          "mae": 0.00021000000000004349,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16179,
+          "pierce_atr": 1.0378653518759715,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 23
+        },
+        {
+          "hypothesis": "H1",
+          "signal_index": 16477,
+          "sweep_index": 16477,
+          "direction": 1,
+          "entry_time": "2026-08-31T23:30:00+00:00",
+          "exit_time": "2026-08-31T23:30:00+00:00",
+          "entry": 1.16146,
+          "exit": 1.16162,
+          "sl": 1.1613799999999999,
+          "tp": 1.16162,
+          "pnl": 0.00016000000000016001,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.00017000000000000348,
+          "mae": 2.999999999997449e-05,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16145,
+          "pierce_atr": 0.37983282356134634,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "",
+          "displacement_run_atr": null,
+          "structure_break": "",
+          "htf_aligned": true,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 23
+        }
+      ]
+    },
+    "H2": {
+      "hypothesis": {
+        "id": "H2",
+        "title": "Sweep + displacement",
+        "components": [
+          "sweep",
+          "displacement"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": null,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": false,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 458,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2762,
+        "skip_bos": 0,
+        "skip_ema13": 0,
+        "skip_htf_align": 0,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 458
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.11143000000000391,
+        "train_pf": 1.2408933217693057,
+        "validation_pf": 1.7747913188646685,
+        "holdout_pf": 0.8307573415765046,
+        "flag": "no early-split concern"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T08:30:00+00:00",
+        "train_end": "2026-05-27T03:42:00+00:00",
+        "validation_end": "2026-07-14T10:06:00+00:00",
+        "oos_end": "2026-08-07T13:18:00+00:00",
+        "t1": "2026-08-31T16:30:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 284,
+          "wins": 116,
+          "losses": 168,
+          "win_rate": 0.4084507042253521,
+          "expectancy": 0.00023471830985917583,
+          "gross_profit": 0.3433800000000211,
+          "gross_loss": 0.2767200000000152,
+          "profit_factor": 1.2408933217693057,
+          "payoff": 1.7971558453210634,
+          "max_drawdown": 0.03458000000000272,
+          "avg_mfe": 0.0021180985915492923,
+          "avg_mae": 0.0015410915492957739,
+          "avg_bars_held": 34.228873239436616,
+          "sl_exits": 159,
+          "tp_exits": 95,
+          "time_exits": 30,
+          "expectancy_ci95": [
+            -6.272183098591853e-05,
+            0.0005298952464789099
+          ],
+          "expectancy_usd_001lot": 0.23471830985917583
+        },
+        "validation": {
+          "n": 92,
+          "wins": 36,
+          "losses": 56,
+          "win_rate": 0.391304347826087,
+          "expectancy": 0.0005044565217391142,
+          "gross_profit": 0.10631000000000479,
+          "gross_loss": 0.05990000000000628,
+          "profit_factor": 1.7747913188646685,
+          "payoff": 2.760786496011707,
+          "max_drawdown": 0.022380000000002287,
+          "avg_mfe": 0.002029347826086965,
+          "avg_mae": 0.001235978260869553,
+          "avg_bars_held": 39.19565217391305,
+          "sl_exits": 48,
+          "tp_exits": 34,
+          "time_exits": 10,
+          "expectancy_ci95": [
+            0.00010477717391305001,
+            0.0009223913043478284
+          ],
+          "expectancy_usd_001lot": 0.5044565217391141
+        },
+        "oos": {
+          "n": 40,
+          "wins": 14,
+          "losses": 26,
+          "win_rate": 0.35,
+          "expectancy": 6.849999999999912e-05,
+          "gross_profit": 0.028090000000002613,
+          "gross_loss": 0.025350000000002648,
+          "profit_factor": 1.1080867850098493,
+          "payoff": 2.0578754578754346,
+          "max_drawdown": 0.005890000000000617,
+          "avg_mfe": 0.0013359999999999928,
+          "avg_mae": 0.0010705000000000076,
+          "avg_bars_held": 31.325,
+          "sl_exits": 24,
+          "tp_exits": 10,
+          "time_exits": 6,
+          "expectancy_ci95": [
+            -0.00042551249999998094,
+            0.0005726750000000309
+          ],
+          "expectancy_usd_001lot": 0.06849999999999912
+        },
+        "holdout": {
+          "n": 42,
+          "wins": 12,
+          "losses": 30,
+          "win_rate": 0.2857142857142857,
+          "expectancy": -0.00010428571428572606,
+          "gross_profit": 0.021500000000002073,
+          "gross_loss": 0.025880000000002568,
+          "profit_factor": 0.8307573415765046,
+          "payoff": 2.0768933539412617,
+          "max_drawdown": 0.009580000000001032,
+          "avg_mfe": 0.001069761904761887,
+          "avg_mae": 0.0009869047619047615,
+          "avg_bars_held": 18.071428571428573,
+          "sl_exits": 30,
+          "tp_exits": 10,
+          "time_exits": 2,
+          "expectancy_ci95": [
+            -0.0004831130952381254,
+            0.00027393452380954016
+          ],
+          "expectancy_usd_001lot": -0.10428571428572606
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 57,
+            "expectancy": 0.0001308771929824721,
+            "pf": 1.154259718775856
+          },
+          {
+            "fold": "fold2",
+            "n": 60,
+            "expectancy": -8.166666666697964e-06,
+            "pf": 0.9909259259258918
+          },
+          {
+            "fold": "fold3",
+            "n": 54,
+            "expectancy": 0.0008688888888888943,
+            "pf": 2.592127587376818
+          },
+          {
+            "fold": "fold4",
+            "n": 53,
+            "expectancy": -0.0002030188679245512,
+            "pf": 0.7363391325655424
+          }
+        ],
+        "positive": 2,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -0.0001746145329984408,
+          "p95_expectancy": 2.828957457661623e-05,
+          "share_draws_ge_real": 0.01,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -1.872147384833079e-05,
+          "p95_expectancy": 0.00036085573310891416,
+          "share_draws_ge_real": 0.38,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -1.872147384833079e-05,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "95% CI of OOS expectancy includes/below 0: (-0.00042551249999998094, 0.0005726750000000309)",
+        "walk-forward stability 2/4 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 51,
+          "expectancy": 0.0005474509803922211,
+          "pf": 1.7195876288660155,
+          "win_rate": 0.4117647058823529
+        },
+        "RANGE": {
+          "n": 80,
+          "expectancy": -2.5374999999949744e-05,
+          "pf": 0.9755774783446114,
+          "win_rate": 0.4375
+        },
+        "STRONG_DOWNTREND": {
+          "n": 175,
+          "expectancy": 0.0001153714285714104,
+          "pf": 1.1307811892731918,
+          "win_rate": 0.3485714285714286
+        },
+        "STRONG_UPTREND": {
+          "n": 115,
+          "expectancy": 0.00022773913043477238,
+          "pf": 1.2985636114910681,
+          "win_rate": 0.34782608695652173
+        },
+        "UPTREND": {
+          "n": 37,
+          "expectancy": 0.0010583783783784046,
+          "pf": 2.643306756189594,
+          "win_rate": 0.5675675675675675
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 270,
+          "expectancy": 0.00025396296296298197,
+          "pf": 1.3549906813004735,
+          "win_rate": 0.37037037037037035
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 188,
+          "expectancy": 0.00022797872340424888,
+          "pf": 1.2201448456520438,
+          "win_rate": 0.4148936170212766
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 139,
+          "expectancy": 0.0004544604316547174,
+          "pf": 1.588613492359312,
+          "win_rate": 0.43884892086330934
+        },
+        "BULLISH": {
+          "n": 128,
+          "expectancy": 0.00034304687500002,
+          "pf": 1.4192685954358797,
+          "win_rate": 0.4296875
+        },
+        "NEUTRAL": {
+          "n": 191,
+          "expectancy": 2.277486910992479e-05,
+          "pf": 1.0247440273037276,
+          "win_rate": 0.32460732984293195
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H2",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H2",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17532,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H2",
+          "signal_index": 226,
+          "sweep_index": 223,
+          "direction": 1,
+          "entry_time": "2026-01-06T08:45:00+00:00",
+          "exit_time": "2026-01-06T09:45:00+00:00",
+          "entry": 1.17342,
+          "exit": 1.1726599999999998,
+          "sl": 1.1726599999999998,
+          "tp": 1.17494,
+          "pnl": -0.0007600000000000939,
+          "reason": "SL",
+          "bars_held": 5,
+          "mfe": 0.0008500000000000174,
+          "mae": 0.0008399999999999519,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17313,
+          "pierce_atr": 1.5094254589233456,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3633520274142337,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "STRONG_UPTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H2",
+          "signal_index": 16354,
+          "sweep_index": 16351,
+          "direction": -1,
+          "entry_time": "2026-08-28T16:45:00+00:00",
+          "exit_time": "2026-08-28T17:00:00+00:00",
+          "entry": 1.16413,
+          "exit": 1.1650900000000002,
+          "sl": 1.1650900000000002,
+          "tp": 1.16221,
+          "pnl": -0.0009600000000000719,
+          "reason": "SL",
+          "bars_held": 2,
+          "mfe": 0.003110000000000168,
+          "mae": 0.0018199999999999328,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16483,
+          "pierce_atr": 2.5973822940047464,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.122591982196847,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 16
+        },
+        {
+          "hypothesis": "H2",
+          "signal_index": 16426,
+          "sweep_index": 16423,
+          "direction": 1,
+          "entry_time": "2026-08-31T10:45:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.1599,
+          "exit": 1.1617,
+          "sl": 1.1584299999999998,
+          "tp": 1.16284,
+          "pnl": 0.0018000000000000238,
+          "reason": "TIME",
+          "bars_held": 54,
+          "mfe": 0.0021800000000000708,
+          "mae": 0.0007399999999999629,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.15856,
+          "pierce_atr": 1.2926071433517936,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.9011849217446124,
+          "structure_break": "",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H2",
+          "signal_index": 16449,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T16:30:00+00:00",
+          "exit_time": "2026-08-31T17:45:00+00:00",
+          "entry": 1.15999,
+          "exit": 1.1617500000000005,
+          "sl": 1.1591099999999999,
+          "tp": 1.1617500000000005,
+          "pnl": 0.0017600000000004279,
+          "reason": "TP",
+          "bars_held": 6,
+          "mfe": 0.0018299999999999983,
+          "mae": 0.0005399999999999849,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 16
+        }
+      ]
+    },
+    "H3": {
+      "hypothesis": {
+        "id": "H3",
+        "title": "Sweep + displacement + BOS",
+        "components": [
+          "sweep",
+          "displacement",
+          "BOS"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": 6,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": false,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 239,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2762,
+        "skip_bos": 219,
+        "skip_ema13": 0,
+        "skip_htf_align": 0,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 239
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.07635999999999465,
+        "train_pf": 1.2411191803186081,
+        "validation_pf": 1.5843920145189658,
+        "holdout_pf": 1.2300593276202287,
+        "flag": "no early-split concern"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T08:30:00+00:00",
+        "train_end": "2026-05-27T04:09:00+00:00",
+        "validation_end": "2026-07-14T10:42:00+00:00",
+        "oos_end": "2026-08-07T13:58:30+00:00",
+        "t1": "2026-08-31T17:15:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 156,
+          "wins": 61,
+          "losses": 95,
+          "win_rate": 0.391025641025641,
+          "expectancy": 0.0002745512820512616,
+          "gross_profit": 0.22046000000000698,
+          "gross_loss": 0.17763000000001017,
+          "profit_factor": 1.2411191803186081,
+          "payoff": 1.932890526725701,
+          "max_drawdown": 0.046830000000002814,
+          "avg_mfe": 0.0022805128205128098,
+          "avg_mae": 0.0017900641025641111,
+          "avg_bars_held": 39.57051282051282,
+          "sl_exits": 86,
+          "tp_exits": 45,
+          "time_exits": 25,
+          "expectancy_ci95": [
+            -0.00016590544871797794,
+            0.0007387996794871854
+          ],
+          "expectancy_usd_001lot": 0.2745512820512616
+        },
+        "validation": {
+          "n": 39,
+          "wins": 16,
+          "losses": 22,
+          "win_rate": 0.41025641025641024,
+          "expectancy": 0.00049538461538457,
+          "gross_profit": 0.052380000000000315,
+          "gross_loss": 0.03306000000000209,
+          "profit_factor": 1.5843920145189658,
+          "payoff": 2.178539019963578,
+          "max_drawdown": 0.010350000000000525,
+          "avg_mfe": 0.002226153846153849,
+          "avg_mae": 0.0015694871794871734,
+          "avg_bars_held": 44.35897435897436,
+          "sl_exits": 20,
+          "tp_exits": 12,
+          "time_exits": 7,
+          "expectancy_ci95": [
+            -0.00029980128205133843,
+            0.0013213525641024985
+          ],
+          "expectancy_usd_001lot": 0.49538461538457
+        },
+        "oos": {
+          "n": 20,
+          "wins": 10,
+          "losses": 10,
+          "win_rate": 0.5,
+          "expectancy": 0.0005360000000000254,
+          "gross_profit": 0.02250000000000152,
+          "gross_loss": 0.011780000000001012,
+          "profit_factor": 1.9100169779286575,
+          "payoff": 1.9100169779286575,
+          "max_drawdown": 0.003920000000000368,
+          "avg_mfe": 0.0018610000000000126,
+          "avg_mae": 0.0010144999999999959,
+          "avg_bars_held": 42.1,
+          "sl_exits": 9,
+          "tp_exits": 7,
+          "time_exits": 4,
+          "expectancy_ci95": [
+            -0.00027961250000003247,
+            0.0014200375000001208
+          ],
+          "expectancy_usd_001lot": 0.5360000000000253
+        },
+        "holdout": {
+          "n": 24,
+          "wins": 9,
+          "losses": 15,
+          "win_rate": 0.375,
+          "expectancy": 0.00014541666666662936,
+          "gross_profit": 0.01866000000000012,
+          "gross_loss": 0.015170000000001016,
+          "profit_factor": 1.2300593276202287,
+          "payoff": 2.050098879367048,
+          "max_drawdown": 0.006450000000000511,
+          "avg_mfe": 0.0015141666666666775,
+          "avg_mae": 0.0009862500000000125,
+          "avg_bars_held": 30.375,
+          "sl_exits": 15,
+          "tp_exits": 5,
+          "time_exits": 4,
+          "expectancy_ci95": [
+            -0.00042584375000006067,
+            0.0007821145833333215
+          ],
+          "expectancy_usd_001lot": 0.14541666666662936
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 26,
+            "expectancy": -0.00022730769230769546,
+            "pf": 0.7774849397590454
+          },
+          {
+            "fold": "fold2",
+            "n": 33,
+            "expectancy": -0.0007836363636364576,
+            "pf": 0.4723525811058645
+          },
+          {
+            "fold": "fold3",
+            "n": 28,
+            "expectancy": 0.0006410714285714016,
+            "pf": 1.756426464390991
+          },
+          {
+            "fold": "fold4",
+            "n": 22,
+            "expectancy": 0.0004945454545454748,
+            "pf": 1.8011782032400305
+          }
+        ],
+        "positive": 2,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -9.111960867127754e-05,
+          "p95_expectancy": 0.00019396648924269392,
+          "share_draws_ge_real": 0.0,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -4.22916360068926e-06,
+          "p95_expectancy": 0.00047288898054940456,
+          "share_draws_ge_real": 0.01,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -4.22916360068926e-06,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "OOS n=20 < 30",
+        "95% CI of OOS expectancy includes/below 0: (-0.00027961250000003247, 0.0014200375000001208)",
+        "walk-forward stability 2/4 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 24,
+          "expectancy": 0.0007545833333333085,
+          "pf": 1.6899047619046956,
+          "win_rate": 0.5
+        },
+        "RANGE": {
+          "n": 53,
+          "expectancy": -0.0002764150943396404,
+          "pf": 0.7886612810155726,
+          "win_rate": 0.41509433962264153
+        },
+        "STRONG_DOWNTREND": {
+          "n": 96,
+          "expectancy": 0.00024135416666663106,
+          "pf": 1.2591432725645357,
+          "win_rate": 0.3333333333333333
+        },
+        "STRONG_UPTREND": {
+          "n": 53,
+          "expectancy": 0.0009903773584905814,
+          "pf": 2.463747908533071,
+          "win_rate": 0.4716981132075472
+        },
+        "UPTREND": {
+          "n": 13,
+          "expectancy": -0.00021230769230778506,
+          "pf": 0.8357142857142306,
+          "win_rate": 0.38461538461538464
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 111,
+          "expectancy": 0.00029009009009005814,
+          "pf": 1.327702015062019,
+          "win_rate": 0.35135135135135137
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 128,
+          "expectancy": 0.00034499999999998594,
+          "pf": 1.3168316831682887,
+          "win_rate": 0.4453125
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 74,
+          "expectancy": 0.00011662162162160547,
+          "pf": 1.1049367704279967,
+          "win_rate": 0.3918918918918919
+        },
+        "BULLISH": {
+          "n": 66,
+          "expectancy": 0.00033666666666664843,
+          "pf": 1.3586184635248109,
+          "win_rate": 0.4090909090909091
+        },
+        "NEUTRAL": {
+          "n": 99,
+          "expectancy": 0.00045969696969693993,
+          "pf": 1.4870505136985641,
+          "win_rate": 0.40404040404040403
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H3",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "BOS",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H3",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17532,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "BOS",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H3",
+          "signal_index": 228,
+          "sweep_index": 223,
+          "direction": 1,
+          "entry_time": "2026-01-06T09:15:00+00:00",
+          "exit_time": "2026-01-06T09:45:00+00:00",
+          "entry": 1.17378,
+          "exit": 1.1726599999999998,
+          "sl": 1.1726599999999998,
+          "tp": 1.1760200000000005,
+          "pnl": -0.001120000000000232,
+          "reason": "SL",
+          "bars_held": 3,
+          "mfe": 0.000140000000000029,
+          "mae": 0.0012000000000000899,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17313,
+          "pierce_atr": 1.5094254589233456,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3633520274142337,
+          "structure_break": "CHOCH",
+          "htf_aligned": false,
+          "regime": "STRONG_UPTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 9
+        },
+        {
+          "hypothesis": "H3",
+          "signal_index": 16355,
+          "sweep_index": 16351,
+          "direction": -1,
+          "entry_time": "2026-08-28T17:00:00+00:00",
+          "exit_time": "2026-08-28T17:00:00+00:00",
+          "entry": 1.16385,
+          "exit": 1.1650900000000002,
+          "sl": 1.1650900000000002,
+          "tp": 1.1613699999999998,
+          "pnl": -0.0012400000000001299,
+          "reason": "SL",
+          "bars_held": 1,
+          "mfe": 0.00283000000000011,
+          "mae": 0.0020999999999999908,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16483,
+          "pierce_atr": 2.5973822940047464,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.122591982196847,
+          "structure_break": "CHOCH",
+          "htf_aligned": false,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        },
+        {
+          "hypothesis": "H3",
+          "signal_index": 16426,
+          "sweep_index": 16423,
+          "direction": 1,
+          "entry_time": "2026-08-31T10:45:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.1599,
+          "exit": 1.1617,
+          "sl": 1.1584299999999998,
+          "tp": 1.16284,
+          "pnl": 0.0018000000000000238,
+          "reason": "TIME",
+          "bars_held": 54,
+          "mfe": 0.0021800000000000708,
+          "mae": 0.0007399999999999629,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.15856,
+          "pierce_atr": 1.2926071433517936,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.9011849217446124,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H3",
+          "signal_index": 16452,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T17:15:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.16012,
+          "exit": 1.1617,
+          "sl": 1.1591099999999999,
+          "tp": 1.1621400000000004,
+          "pnl": 0.0015799999999999148,
+          "reason": "TIME",
+          "bars_held": 28,
+          "mfe": 0.0019599999999999618,
+          "mae": 0.00012000000000012001,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        }
+      ]
+    },
+    "H4": {
+      "hypothesis": {
+        "id": "H4",
+        "title": "Sweep + displacement + BOS + EMA13",
+        "components": [
+          "sweep",
+          "displacement",
+          "BOS",
+          "EMA13"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": 6,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": true,
+        "require_htf_zone": false,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 234,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2762,
+        "skip_bos": 219,
+        "skip_ema13": 5,
+        "skip_htf_align": 0,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 234
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.07059999999999422,
+        "train_pf": 1.2137461800149583,
+        "validation_pf": 1.5843920145189658,
+        "holdout_pf": 1.2300593276202287,
+        "flag": "no early-split concern"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T08:30:00+00:00",
+        "train_end": "2026-05-27T04:09:00+00:00",
+        "validation_end": "2026-07-14T10:42:00+00:00",
+        "oos_end": "2026-08-07T13:58:30+00:00",
+        "t1": "2026-08-31T17:15:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 151,
+          "wins": 58,
+          "losses": 93,
+          "win_rate": 0.3841059602649007,
+          "expectancy": 0.0002454966887416979,
+          "gross_profit": 0.21050000000000657,
+          "gross_loss": 0.1734300000000102,
+          "profit_factor": 1.2137461800149583,
+          "payoff": 1.9461792196791572,
+          "max_drawdown": 0.04263000000000283,
+          "avg_mfe": 0.0022597350993377387,
+          "avg_mae": 0.0018114569536423902,
+          "avg_bars_held": 40.17218543046358,
+          "sl_exits": 84,
+          "tp_exits": 42,
+          "time_exits": 25,
+          "expectancy_ci95": [
+            -0.0001944470198675937,
+            0.000741051324503292
+          ],
+          "expectancy_usd_001lot": 0.2454966887416979
+        },
+        "validation": {
+          "n": 39,
+          "wins": 16,
+          "losses": 22,
+          "win_rate": 0.41025641025641024,
+          "expectancy": 0.00049538461538457,
+          "gross_profit": 0.052380000000000315,
+          "gross_loss": 0.03306000000000209,
+          "profit_factor": 1.5843920145189658,
+          "payoff": 2.178539019963578,
+          "max_drawdown": 0.010350000000000525,
+          "avg_mfe": 0.002226153846153849,
+          "avg_mae": 0.0015694871794871734,
+          "avg_bars_held": 44.35897435897436,
+          "sl_exits": 20,
+          "tp_exits": 12,
+          "time_exits": 7,
+          "expectancy_ci95": [
+            -0.00029980128205133843,
+            0.0013213525641024985
+          ],
+          "expectancy_usd_001lot": 0.49538461538457
+        },
+        "oos": {
+          "n": 20,
+          "wins": 10,
+          "losses": 10,
+          "win_rate": 0.5,
+          "expectancy": 0.0005360000000000254,
+          "gross_profit": 0.02250000000000152,
+          "gross_loss": 0.011780000000001012,
+          "profit_factor": 1.9100169779286575,
+          "payoff": 1.9100169779286575,
+          "max_drawdown": 0.003920000000000368,
+          "avg_mfe": 0.0018610000000000126,
+          "avg_mae": 0.0010144999999999959,
+          "avg_bars_held": 42.1,
+          "sl_exits": 9,
+          "tp_exits": 7,
+          "time_exits": 4,
+          "expectancy_ci95": [
+            -0.00027961250000003247,
+            0.0014200375000001208
+          ],
+          "expectancy_usd_001lot": 0.5360000000000253
+        },
+        "holdout": {
+          "n": 24,
+          "wins": 9,
+          "losses": 15,
+          "win_rate": 0.375,
+          "expectancy": 0.00014541666666662936,
+          "gross_profit": 0.01866000000000012,
+          "gross_loss": 0.015170000000001016,
+          "profit_factor": 1.2300593276202287,
+          "payoff": 2.050098879367048,
+          "max_drawdown": 0.006450000000000511,
+          "avg_mfe": 0.0015141666666666775,
+          "avg_mae": 0.0009862500000000125,
+          "avg_bars_held": 30.375,
+          "sl_exits": 15,
+          "tp_exits": 5,
+          "time_exits": 4,
+          "expectancy_ci95": [
+            -0.00042542708333339105,
+            0.0007821250000000064
+          ],
+          "expectancy_usd_001lot": 0.14541666666662936
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 23,
+            "expectancy": -0.00020478260869566148,
+            "pf": 0.7893559928443694
+          },
+          {
+            "fold": "fold2",
+            "n": 33,
+            "expectancy": -0.0007836363636364576,
+            "pf": 0.4723525811058645
+          },
+          {
+            "fold": "fold3",
+            "n": 28,
+            "expectancy": 0.0006410714285714016,
+            "pf": 1.756426464390991
+          },
+          {
+            "fold": "fold4",
+            "n": 22,
+            "expectancy": 0.0004945454545454748,
+            "pf": 1.8011782032400305
+          }
+        ],
+        "positive": 2,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -9.111960867127754e-05,
+          "p95_expectancy": 0.00019396648924269392,
+          "share_draws_ge_real": 0.0,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -4.22916360068926e-06,
+          "p95_expectancy": 0.00047288898054940456,
+          "share_draws_ge_real": 0.01,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -4.22916360068926e-06,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "OOS n=20 < 30",
+        "95% CI of OOS expectancy includes/below 0: (-0.00027961250000003247, 0.0014200375000001208)",
+        "walk-forward stability 2/4 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 24,
+          "expectancy": 0.0007545833333333085,
+          "pf": 1.6899047619046956,
+          "win_rate": 0.5
+        },
+        "RANGE": {
+          "n": 52,
+          "expectancy": -0.00033942307692309717,
+          "pf": 0.7453837276399231,
+          "win_rate": 0.40384615384615385
+        },
+        "STRONG_DOWNTREND": {
+          "n": 94,
+          "expectancy": 0.00029117021276592087,
+          "pf": 1.3212064311699891,
+          "win_rate": 0.3404255319148936
+        },
+        "STRONG_UPTREND": {
+          "n": 51,
+          "expectancy": 0.0008927450980392257,
+          "pf": 2.2696597880645926,
+          "win_rate": 0.45098039215686275
+        },
+        "UPTREND": {
+          "n": 13,
+          "expectancy": -0.00021230769230778506,
+          "pf": 0.8357142857142306,
+          "win_rate": 0.38461538461538464
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 110,
+          "expectancy": 0.00026545454545451216,
+          "pf": 1.2971707714226959,
+          "win_rate": 0.34545454545454546
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 124,
+          "expectancy": 0.0003338709677419184,
+          "pf": 1.3062583222369863,
+          "win_rate": 0.4435483870967742
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 72,
+          "expectancy": 0.00017819444444442759,
+          "pf": 1.1644028703228886,
+          "win_rate": 0.4027777777777778
+        },
+        "BULLISH": {
+          "n": 64,
+          "expectancy": 0.00023843749999997652,
+          "pf": 1.246287927695246,
+          "win_rate": 0.390625
+        },
+        "NEUTRAL": {
+          "n": 98,
+          "expectancy": 0.0004337755102040504,
+          "pf": 1.4549443493150034,
+          "win_rate": 0.3979591836734694
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H4",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "BOS",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H4",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17532,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "BOS",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H4",
+          "signal_index": 228,
+          "sweep_index": 223,
+          "direction": 1,
+          "entry_time": "2026-01-06T09:15:00+00:00",
+          "exit_time": "2026-01-06T09:45:00+00:00",
+          "entry": 1.17378,
+          "exit": 1.1726599999999998,
+          "sl": 1.1726599999999998,
+          "tp": 1.1760200000000005,
+          "pnl": -0.001120000000000232,
+          "reason": "SL",
+          "bars_held": 3,
+          "mfe": 0.000140000000000029,
+          "mae": 0.0012000000000000899,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17313,
+          "pierce_atr": 1.5094254589233456,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3633520274142337,
+          "structure_break": "CHOCH",
+          "htf_aligned": false,
+          "regime": "STRONG_UPTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 9
+        },
+        {
+          "hypothesis": "H4",
+          "signal_index": 16355,
+          "sweep_index": 16351,
+          "direction": -1,
+          "entry_time": "2026-08-28T17:00:00+00:00",
+          "exit_time": "2026-08-28T17:00:00+00:00",
+          "entry": 1.16385,
+          "exit": 1.1650900000000002,
+          "sl": 1.1650900000000002,
+          "tp": 1.1613699999999998,
+          "pnl": -0.0012400000000001299,
+          "reason": "SL",
+          "bars_held": 1,
+          "mfe": 0.00283000000000011,
+          "mae": 0.0020999999999999908,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16483,
+          "pierce_atr": 2.5973822940047464,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.122591982196847,
+          "structure_break": "CHOCH",
+          "htf_aligned": false,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        },
+        {
+          "hypothesis": "H4",
+          "signal_index": 16426,
+          "sweep_index": 16423,
+          "direction": 1,
+          "entry_time": "2026-08-31T10:45:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.1599,
+          "exit": 1.1617,
+          "sl": 1.1584299999999998,
+          "tp": 1.16284,
+          "pnl": 0.0018000000000000238,
+          "reason": "TIME",
+          "bars_held": 54,
+          "mfe": 0.0021800000000000708,
+          "mae": 0.0007399999999999629,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.15856,
+          "pierce_atr": 1.2926071433517936,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.9011849217446124,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H4",
+          "signal_index": 16452,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T17:15:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.16012,
+          "exit": 1.1617,
+          "sl": 1.1591099999999999,
+          "tp": 1.1621400000000004,
+          "pnl": 0.0015799999999999148,
+          "reason": "TIME",
+          "bars_held": 28,
+          "mfe": 0.0019599999999999618,
+          "mae": 0.00012000000000012001,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        }
+      ]
+    },
+    "H5": {
+      "hypothesis": {
+        "id": "H5",
+        "title": "Sweep of HTF liquidity + displacement",
+        "components": [
+          "sweep:HTF",
+          "displacement"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": null,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": true,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 54,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 3032,
+        "skip_displacement": 134,
+        "skip_bos": 0,
+        "skip_ema13": 0,
+        "skip_htf_align": 0,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 54
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.0033000000000000806,
+        "train_pf": 0.5789636984176416,
+        "validation_pf": 4.463087248322169,
+        "holdout_pf": 2.0599999999999357,
+        "flag": "STABILITY_CONCERN: train/validation PF < 1 — edge concentrated in the most recent period, likely regime; deployment NOT recommended"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T08:30:00+00:00",
+        "train_end": "2026-05-24T16:18:00+00:00",
+        "validation_end": "2026-07-11T02:54:00+00:00",
+        "oos_end": "2026-08-03T20:12:00+00:00",
+        "t1": "2026-08-27T13:30:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 35,
+          "wins": 13,
+          "losses": 22,
+          "win_rate": 0.37142857142857144,
+          "expectancy": -0.00038771428571430074,
+          "gross_profit": 0.01866000000000212,
+          "gross_loss": 0.032230000000002645,
+          "profit_factor": 0.5789636984176416,
+          "payoff": 0.9797847203990857,
+          "max_drawdown": 0.018970000000001708,
+          "avg_mfe": 0.00172257142857144,
+          "avg_mae": 0.0017071428571428246,
+          "avg_bars_held": 36.02857142857143,
+          "sl_exits": 22,
+          "tp_exits": 7,
+          "time_exits": 6,
+          "expectancy_ci95": [
+            -0.0009386071428572264,
+            0.00021729285714290145
+          ],
+          "expectancy_usd_001lot": -0.3877142857143007
+        },
+        "validation": {
+          "n": 7,
+          "wins": 4,
+          "losses": 3,
+          "win_rate": 0.5714285714285714,
+          "expectancy": 0.0014742857142858248,
+          "gross_profit": 0.013300000000000978,
+          "gross_loss": 0.0029800000000002047,
+          "profit_factor": 4.463087248322169,
+          "payoff": 3.347315436241627,
+          "max_drawdown": 0.0017600000000002058,
+          "avg_mfe": 0.002871428571428541,
+          "avg_mae": 0.0009728571428571404,
+          "avg_bars_held": 49.857142857142854,
+          "sl_exits": 3,
+          "tp_exits": 4,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            -0.0003342857142857473,
+            0.00282314285714311
+          ],
+          "expectancy_usd_001lot": 1.4742857142858248
+        },
+        "oos": {
+          "n": 8,
+          "wins": 3,
+          "losses": 5,
+          "win_rate": 0.375,
+          "expectancy": 0.0005537499999999362,
+          "gross_profit": 0.00774000000000008,
+          "gross_loss": 0.0033100000000005902,
+          "profit_factor": 2.3383685800600302,
+          "payoff": 3.897280966766717,
+          "max_drawdown": 0.0033100000000005902,
+          "avg_mfe": 0.0018124999999999947,
+          "avg_mae": 0.0015274999999999317,
+          "avg_bars_held": 21.375,
+          "sl_exits": 4,
+          "tp_exits": 3,
+          "time_exits": 1,
+          "expectancy_ci95": [
+            -0.0005213125000000852,
+            0.0018124999999999947
+          ],
+          "expectancy_usd_001lot": 0.5537499999999362
+        },
+        "holdout": {
+          "n": 4,
+          "wins": 2,
+          "losses": 2,
+          "win_rate": 0.5,
+          "expectancy": 0.000530000000000086,
+          "gross_profit": 0.00412000000000079,
+          "gross_loss": 0.002000000000000446,
+          "profit_factor": 2.0599999999999357,
+          "payoff": 2.0599999999999357,
+          "max_drawdown": 0.0014200000000001989,
+          "avg_mfe": 0.001167499999999877,
+          "avg_mae": 0.0013300000000000534,
+          "avg_bars_held": 26.0,
+          "sl_exits": 2,
+          "tp_exits": 2,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            -0.001000000000000223,
+            0.002060000000000395
+          ],
+          "expectancy_usd_001lot": 0.530000000000086
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 7,
+            "expectancy": -0.0005885714285715414,
+            "pf": 0.4379263301500161
+          },
+          {
+            "fold": "fold2",
+            "n": 3,
+            "expectancy": 0.00014999999999987246,
+            "pf": 1.1724137931032723
+          },
+          {
+            "fold": "fold3",
+            "n": 5,
+            "expectancy": 0.0016960000000001418,
+            "pf": 5.818181818181658
+          },
+          {
+            "fold": "fold4",
+            "n": 9,
+            "expectancy": 0.0003566666666666101,
+            "pf": 1.7086092715229744
+          }
+        ],
+        "positive": 2,
+        "valid": 3
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -1.4647655419629257e-05,
+          "p95_expectancy": 0.0009690660384665262,
+          "share_draws_ge_real": 0.08,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -3.8588123486647805e-05,
+          "p95_expectancy": 0.0007564379712786366,
+          "share_draws_ge_real": 0.14,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -1.4647655419629257e-05,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "OOS n=8 < 30",
+        "95% CI of OOS expectancy includes/below 0: (-0.0005213125000000852, 0.0018124999999999947)",
+        "walk-forward stability 2/3 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 10,
+          "expectancy": -0.0009630000000000916,
+          "pf": 0.21897810218976,
+          "win_rate": 0.1
+        },
+        "RANGE": {
+          "n": 9,
+          "expectancy": -0.00019777777777771653,
+          "pf": 0.7520891364903493,
+          "win_rate": 0.3333333333333333
+        },
+        "STRONG_DOWNTREND": {
+          "n": 14,
+          "expectancy": -0.0005178571428572365,
+          "pf": 0.4613670133729317,
+          "win_rate": 0.21428571428571427
+        },
+        "STRONG_UPTREND": {
+          "n": 14,
+          "expectancy": 0.0003778571428572234,
+          "pf": 1.8088685015291706,
+          "win_rate": 0.6428571428571429
+        },
+        "UPTREND": {
+          "n": 7,
+          "expectancy": 0.0023814285714286614,
+          "pf": 17.50495049504723,
+          "win_rate": 0.8571428571428571
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 30,
+          "expectancy": -0.00012866666666670282,
+          "pf": 0.7969489742240636,
+          "win_rate": 0.4
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 24,
+          "expectancy": 0.0002983333333333819,
+          "pf": 1.332868433286878,
+          "win_rate": 0.4166666666666667
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 18,
+          "expectancy": 0.0003055555555556329,
+          "pf": 1.3878702397743896,
+          "win_rate": 0.4444444444444444
+        },
+        "BULLISH": {
+          "n": 22,
+          "expectancy": 4.2727272727239764e-05,
+          "pf": 1.0638153428376895,
+          "win_rate": 0.45454545454545453
+        },
+        "NEUTRAL": {
+          "n": 14,
+          "expectancy": -0.0002242857142857562,
+          "pf": 0.7295434969853253,
+          "win_rate": 0.2857142857142857
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H5",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T12:15:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17143,
+          "sl": 1.17581,
+          "tp": 1.17143,
+          "pnl": 0.0029200000000000337,
+          "reason": "TP",
+          "bars_held": 16,
+          "mfe": 0.0030399999999999316,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H5",
+          "signal_index": 51,
+          "sweep_index": 48,
+          "direction": 1,
+          "entry_time": "2026-01-02T13:00:00+00:00",
+          "exit_time": "2026-01-02T17:00:00+00:00",
+          "entry": 1.17209,
+          "exit": 1.1733300000000007,
+          "sl": 1.1714699999999998,
+          "tp": 1.1733300000000007,
+          "pnl": 0.001240000000000574,
+          "reason": "TP",
+          "bars_held": 17,
+          "mfe": 0.0015999999999998238,
+          "mae": 0.0005800000000000249,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17193,
+          "pierce_atr": 1.1709429010168817,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 0.9163900964478633,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 13
+        },
+        {
+          "hypothesis": "H5",
+          "signal_index": 51,
+          "sweep_index": 48,
+          "direction": 1,
+          "entry_time": "2026-01-02T13:00:00+00:00",
+          "exit_time": "2026-01-02T17:00:00+00:00",
+          "entry": 1.17209,
+          "exit": 1.1733300000000007,
+          "sl": 1.1714699999999998,
+          "tp": 1.1733300000000007,
+          "pnl": 0.001240000000000574,
+          "reason": "TP",
+          "bars_held": 17,
+          "mfe": 0.0015999999999998238,
+          "mae": 0.0005800000000000249,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17199,
+          "pierce_atr": 1.1709429010168817,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 0.9163900964478633,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 13
+        },
+        {
+          "hypothesis": "H5",
+          "signal_index": 15188,
+          "sweep_index": 15185,
+          "direction": -1,
+          "entry_time": "2026-08-12T13:15:00+00:00",
+          "exit_time": "2026-08-12T15:30:00+00:00",
+          "entry": 1.15363,
+          "exit": 1.1550500000000001,
+          "sl": 1.1550500000000001,
+          "tp": 1.1507899999999995,
+          "pnl": -0.0014200000000001989,
+          "reason": "SL",
+          "bars_held": 10,
+          "mfe": 0.00038999999999989043,
+          "mae": 0.0026800000000000157,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.15485,
+          "pierce_atr": 2.993102348626227,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.0256349228073978,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 13
+        },
+        {
+          "hypothesis": "H5",
+          "signal_index": 15859,
+          "sweep_index": 15856,
+          "direction": -1,
+          "entry_time": "2026-08-21T13:00:00+00:00",
+          "exit_time": "2026-08-21T17:00:00+00:00",
+          "entry": 1.17003,
+          "exit": 1.1676899999999997,
+          "sl": 1.1712,
+          "tp": 1.1676899999999997,
+          "pnl": 0.002340000000000231,
+          "reason": "TP",
+          "bars_held": 17,
+          "mfe": 0.0023699999999999832,
+          "mae": 0.0010499999999999954,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17106,
+          "pierce_atr": 1.6679924981216554,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 1.7050589980801611,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "STRONG_UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 13
+        },
+        {
+          "hypothesis": "H5",
+          "signal_index": 16245,
+          "sweep_index": 16242,
+          "direction": 1,
+          "entry_time": "2026-08-27T13:30:00+00:00",
+          "exit_time": "2026-08-27T13:30:00+00:00",
+          "entry": 1.16457,
+          "exit": 1.1639899999999999,
+          "sl": 1.1639899999999999,
+          "tp": 1.1657300000000006,
+          "pnl": -0.000580000000000247,
+          "reason": "SL",
+          "bars_held": 1,
+          "mfe": 3.999999999981796e-05,
+          "mae": 0.0007300000000001194,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.1642,
+          "pierce_atr": 1.7828777698233471,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 1.0753865913219292,
+          "structure_break": "",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 13
+        }
+      ]
+    },
+    "H6": {
+      "hypothesis": {
+        "id": "H6",
+        "title": "Sweep + displacement + BOS + MTF alignment",
+        "components": [
+          "sweep",
+          "displacement",
+          "BOS",
+          "MTF"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": 6,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": false,
+        "require_htf_trend_align": true,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 155,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2479,
+        "skip_bos": 414,
+        "skip_ema13": 0,
+        "skip_htf_align": 172,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 155
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.04718999999999696,
+        "train_pf": 1.162934362934335,
+        "validation_pf": 1.9789251844045006,
+        "holdout_pf": 1.5578947368419795,
+        "flag": "no early-split concern"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-19T10:15:00+00:00",
+        "train_end": "2026-06-03T00:03:00+00:00",
+        "validation_end": "2026-07-17T20:39:00+00:00",
+        "oos_end": "2026-08-09T06:57:00+00:00",
+        "t1": "2026-08-31T17:15:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 108,
+          "wins": 42,
+          "losses": 66,
+          "win_rate": 0.3888888888888889,
+          "expectancy": 0.00017583333333331334,
+          "gross_profit": 0.13554000000000466,
+          "gross_loss": 0.11655000000000681,
+          "profit_factor": 1.162934362934335,
+          "payoff": 1.8274682846110974,
+          "max_drawdown": 0.04255000000000253,
+          "avg_mfe": 0.0021063888888888825,
+          "avg_mae": 0.001752222222222227,
+          "avg_bars_held": 41.19444444444444,
+          "sl_exits": 57,
+          "tp_exits": 28,
+          "time_exits": 23,
+          "expectancy_ci95": [
+            -0.0003339236111111517,
+            0.0007217731481481298
+          ],
+          "expectancy_usd_001lot": 0.17583333333331333
+        },
+        "validation": {
+          "n": 27,
+          "wins": 11,
+          "losses": 16,
+          "win_rate": 0.4074074074074074,
+          "expectancy": 0.000688148148148125,
+          "gross_profit": 0.03756000000000137,
+          "gross_loss": 0.018980000000001995,
+          "profit_factor": 1.9789251844045006,
+          "payoff": 2.878436631861092,
+          "max_drawdown": 0.00863000000000036,
+          "avg_mfe": 0.002112592592592608,
+          "avg_mae": 0.0012244444444444477,
+          "avg_bars_held": 34.074074074074076,
+          "sl_exits": 16,
+          "tp_exits": 9,
+          "time_exits": 2,
+          "expectancy_ci95": [
+            -0.00019707407407411505,
+            0.0015926481481481779
+          ],
+          "expectancy_usd_001lot": 0.6881481481481251
+        },
+        "oos": {
+          "n": 9,
+          "wins": 6,
+          "losses": 3,
+          "win_rate": 0.6666666666666666,
+          "expectancy": 0.0006566666666667004,
+          "gross_profit": 0.008500000000000618,
+          "gross_loss": 0.0025900000000003143,
+          "profit_factor": 3.2818532818531225,
+          "payoff": 1.6409266409265613,
+          "max_drawdown": 0.0019100000000003003,
+          "avg_mfe": 0.002392222222222228,
+          "avg_mae": 0.000977777777777744,
+          "avg_bars_held": 57.0,
+          "sl_exits": 3,
+          "tp_exits": 3,
+          "time_exits": 3,
+          "expectancy_ci95": [
+            -0.00012783333333335592,
+            0.0014244444444445005
+          ],
+          "expectancy_usd_001lot": 0.6566666666667005
+        },
+        "holdout": {
+          "n": 11,
+          "wins": 5,
+          "losses": 6,
+          "win_rate": 0.45454545454545453,
+          "expectancy": 0.000337272727272676,
+          "gross_profit": 0.010359999999999925,
+          "gross_loss": 0.006650000000000489,
+          "profit_factor": 1.5578947368419795,
+          "payoff": 1.8694736842103752,
+          "max_drawdown": 0.003610000000000335,
+          "avg_mfe": 0.0012327272727272944,
+          "avg_mae": 0.0008290909090908904,
+          "avg_bars_held": 23.818181818181817,
+          "sl_exits": 6,
+          "tp_exits": 3,
+          "time_exits": 2,
+          "expectancy_ci95": [
+            -0.0006354545454545915,
+            0.001260045454545432
+          ],
+          "expectancy_usd_001lot": 0.337272727272676
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 23,
+            "expectancy": -0.0014521739130435693,
+            "pf": 0.08468073444779
+          },
+          {
+            "fold": "fold2",
+            "n": 19,
+            "expectancy": -0.00043315789473686336,
+            "pf": 0.6189814814814913
+          },
+          {
+            "fold": "fold3",
+            "n": 15,
+            "expectancy": 0.001035999999999963,
+            "pf": 2.4536950420952315
+          },
+          {
+            "fold": "fold4",
+            "n": 13,
+            "expectancy": 0.0007407692307692499,
+            "pf": 3.260563380281432
+          }
+        ],
+        "positive": 2,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -9.948486456494019e-05,
+          "p95_expectancy": 0.0005585350520586717,
+          "share_draws_ge_real": 0.0,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -1.0687490993076391e-06,
+          "p95_expectancy": 0.0008827950350315483,
+          "share_draws_ge_real": 0.11,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -1.0687490993076391e-06,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "OOS n=9 < 30",
+        "95% CI of OOS expectancy includes/below 0: (-0.00012783333333335592, 0.0014244444444445005)",
+        "walk-forward stability 2/4 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 16,
+          "expectancy": 0.0003125000000000072,
+          "pf": 1.2548419979612588,
+          "win_rate": 0.4375
+        },
+        "RANGE": {
+          "n": 31,
+          "expectancy": 0.00018064516129030268,
+          "pf": 1.2015838732901007,
+          "win_rate": 0.41935483870967744
+        },
+        "STRONG_DOWNTREND": {
+          "n": 61,
+          "expectancy": 0.00026327868852456043,
+          "pf": 1.288123430211648,
+          "win_rate": 0.3770491803278688
+        },
+        "STRONG_UPTREND": {
+          "n": 32,
+          "expectancy": 0.0006499999999999978,
+          "pf": 1.764144011755996,
+          "win_rate": 0.46875
+        },
+        "UPTREND": {
+          "n": 15,
+          "expectancy": -1.8000000000043907e-05,
+          "pf": 0.981263011797319,
+          "win_rate": 0.4
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 40,
+          "expectancy": 0.0002915000000000001,
+          "pf": 1.3800521512385586,
+          "win_rate": 0.475
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 115,
+          "expectancy": 0.00030895652173910395,
+          "pf": 1.3114208081338838,
+          "win_rate": 0.391304347826087
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 42,
+          "expectancy": -0.0003750000000000142,
+          "pf": 0.7112740604949589,
+          "win_rate": 0.2857142857142857
+        },
+        "BULLISH": {
+          "n": 44,
+          "expectancy": 0.0003438636363636182,
+          "pf": 1.4053040450039693,
+          "win_rate": 0.4090909090909091
+        },
+        "NEUTRAL": {
+          "n": 69,
+          "expectancy": 0.0006928985507246139,
+          "pf": 1.9039515976553951,
+          "win_rate": 0.4927536231884058
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H6",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16409,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H6",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16378,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H6",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16374,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H6",
+          "signal_index": 16343,
+          "sweep_index": 16340,
+          "direction": 1,
+          "entry_time": "2026-08-28T14:00:00+00:00",
+          "exit_time": "2026-08-28T16:45:00+00:00",
+          "entry": 1.16491,
+          "exit": 1.1638799999999998,
+          "sl": 1.1638799999999998,
+          "tp": 1.16697,
+          "pnl": -0.0010300000000000864,
+          "reason": "SL",
+          "bars_held": 12,
+          "mfe": 0.00013000000000018552,
+          "mae": 0.0011799999999999589,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16396,
+          "pierce_atr": 0.9400989922844928,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.7554625635906422,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 14
+        },
+        {
+          "hypothesis": "H6",
+          "signal_index": 16426,
+          "sweep_index": 16423,
+          "direction": 1,
+          "entry_time": "2026-08-31T10:45:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.1599,
+          "exit": 1.1617,
+          "sl": 1.1584299999999998,
+          "tp": 1.16284,
+          "pnl": 0.0018000000000000238,
+          "reason": "TIME",
+          "bars_held": 54,
+          "mfe": 0.0021800000000000708,
+          "mae": 0.0007399999999999629,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.15856,
+          "pierce_atr": 1.2926071433517936,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.9011849217446124,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H6",
+          "signal_index": 16452,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T17:15:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.16012,
+          "exit": 1.1617,
+          "sl": 1.1591099999999999,
+          "tp": 1.1621400000000004,
+          "pnl": 0.0015799999999999148,
+          "reason": "TIME",
+          "bars_held": 28,
+          "mfe": 0.0019599999999999618,
+          "mae": 0.00012000000000012001,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        }
+      ]
+    },
+    "H7": {
+      "hypothesis": {
+        "id": "H7",
+        "title": "Sweep + displacement with opposite-liquidity target",
+        "components": [
+          "sweep",
+          "displacement",
+          "opposite_liquidity_target"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": null,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": false,
+        "require_htf_zone": false,
+        "require_htf_trend_align": false,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "OPPOSITE_LIQUIDITY",
+        "rr": 2.0
+      },
+      "n_total": 740,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2479,
+        "skip_bos": 0,
+        "skip_ema13": 0,
+        "skip_htf_align": 0,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 1,
+        "skip_sim": 0,
+        "built": 740
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.039129999999998555,
+        "train_pf": 2.1614398691026864,
+        "validation_pf": 0.9955780164244823,
+        "holdout_pf": 1.1585760517800152,
+        "flag": "STABILITY_CONCERN: train/validation PF < 1 — edge concentrated in the most recent period, likely regime; deployment NOT recommended"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-02T08:30:00+00:00",
+        "train_end": "2026-05-27T03:42:00+00:00",
+        "validation_end": "2026-07-14T10:06:00+00:00",
+        "oos_end": "2026-08-07T13:18:00+00:00",
+        "t1": "2026-08-31T16:30:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 462,
+          "wins": 433,
+          "losses": 29,
+          "win_rate": 0.9372294372294372,
+          "expectancy": 9.218614718614409e-05,
+          "gross_profit": 0.07926000000000122,
+          "gross_loss": 0.036670000000002645,
+          "profit_factor": 2.1614398691026864,
+          "payoff": 0.14476156167200438,
+          "max_drawdown": 0.005850000000000133,
+          "avg_mfe": 0.0005005194805194769,
+          "avg_mae": 0.0004424675324675316,
+          "avg_bars_held": 2.0281385281385282,
+          "sl_exits": 29,
+          "tp_exits": 433,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            4.514015151513766e-05,
+            0.00013627759740259812
+          ],
+          "expectancy_usd_001lot": 0.0921861471861441
+        },
+        "validation": {
+          "n": 157,
+          "wins": 136,
+          "losses": 21,
+          "win_rate": 0.8662420382165605,
+          "expectancy": -4.458598726143859e-07,
+          "gross_profit": 0.01576000000000266,
+          "gross_loss": 0.01583000000000312,
+          "profit_factor": 0.9955780164244823,
+          "payoff": 0.15372895841848624,
+          "max_drawdown": 0.006820000000001825,
+          "avg_mfe": 0.0003666878980891784,
+          "avg_mae": 0.00038433121019107187,
+          "avg_bars_held": 1.643312101910828,
+          "sl_exits": 21,
+          "tp_exits": 136,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            -5.0523885350333625e-05,
+            4.7073248407657015e-05
+          ],
+          "expectancy_usd_001lot": -0.00044585987261438586
+        },
+        "oos": {
+          "n": 66,
+          "wins": 56,
+          "losses": 10,
+          "win_rate": 0.8484848484848485,
+          "expectancy": -5.878787878787703e-05,
+          "gross_profit": 0.004900000000001015,
+          "gross_loss": 0.008780000000000898,
+          "profit_factor": 0.5580865603645232,
+          "payoff": 0.0996583143508077,
+          "max_drawdown": 0.00540000000000096,
+          "avg_mfe": 0.0002928787878787788,
+          "avg_mae": 0.0004018181818181934,
+          "avg_bars_held": 1.8636363636363635,
+          "sl_exits": 10,
+          "tp_exits": 56,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            -0.00015318560606062016,
+            2.212878787880791e-05
+          ],
+          "expectancy_usd_001lot": -0.05878787878787703
+        },
+        "holdout": {
+          "n": 55,
+          "wins": 50,
+          "losses": 5,
+          "win_rate": 0.9090909090909091,
+          "expectancy": 8.909090909096791e-06,
+          "gross_profit": 0.0035800000000008048,
+          "gross_loss": 0.0030900000000004813,
+          "profit_factor": 1.1585760517800152,
+          "payoff": 0.11585760517800153,
+          "max_drawdown": 0.0016700000000005044,
+          "avg_mfe": 0.00024709090909090894,
+          "avg_mae": 0.00027709090909090766,
+          "avg_bars_held": 1.490909090909091,
+          "sl_exits": 5,
+          "tp_exits": 50,
+          "time_exits": 0,
+          "expectancy_ci95": [
+            -4.691363636365201e-05,
+            5.9277272727285784e-05
+          ],
+          "expectancy_usd_001lot": 0.00890909090909679
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 97,
+            "expectancy": 5.010309278350833e-05,
+            "pf": 2.446428571428364
+          },
+          {
+            "fold": "fold2",
+            "n": 89,
+            "expectancy": 1.865168539326835e-05,
+            "pf": 1.3480083857443594
+          },
+          {
+            "fold": "fold3",
+            "n": 101,
+            "expectancy": 9.900990098997818e-06,
+            "pf": 1.092250922509096
+          },
+          {
+            "fold": "fold4",
+            "n": 90,
+            "expectancy": -3.577777777776792e-05,
+            "pf": 0.6849315068494466
+          }
+        ],
+        "positive": 3,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -5.526988398101634e-05,
+          "p95_expectancy": 0.0001482747774895773,
+          "share_draws_ge_real": 0.49,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -3.189531407272247e-05,
+          "p95_expectancy": 0.0002541409567211308,
+          "share_draws_ge_real": 0.61,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -3.189531407272247e-05,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "95% CI of OOS expectancy includes/below 0: (-0.00015318560606062016, 2.212878787880791e-05)",
+        "OOS PF=0.5580865603645232",
+        "OOS expectancy -0.000059 <= best control -0.000032"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 87,
+          "expectancy": 5.609195402300887e-05,
+          "pf": 1.6062111801244185,
+          "win_rate": 0.9080459770114943
+        },
+        "RANGE": {
+          "n": 127,
+          "expectancy": 4.6456692913288046e-06,
+          "pf": 1.0327413984461,
+          "win_rate": 0.905511811023622
+        },
+        "STRONG_DOWNTREND": {
+          "n": 269,
+          "expectancy": 7.286245353159132e-05,
+          "pf": 1.9655172413790785,
+          "win_rate": 0.9070631970260223
+        },
+        "STRONG_UPTREND": {
+          "n": 194,
+          "expectancy": 4.242268041236177e-05,
+          "pf": 1.5255427841632831,
+          "win_rate": 0.9123711340206185
+        },
+        "UPTREND": {
+          "n": 63,
+          "expectancy": 9.253968253971076e-05,
+          "pf": 3.491452991453033,
+          "win_rate": 0.9523809523809523
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 282,
+          "expectancy": 8.531914893616618e-05,
+          "pf": 1.9942148760328284,
+          "win_rate": 0.8936170212765957
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 458,
+          "expectancy": 3.29039301310037e-05,
+          "pf": 1.3751555887477889,
+          "win_rate": 0.9235807860262009
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 211,
+          "expectancy": 9.791469194311908e-05,
+          "pf": 2.5627836611191106,
+          "win_rate": 0.9146919431279621
+        },
+        "BULLISH": {
+          "n": 235,
+          "expectancy": 5.5999999999999315e-05,
+          "pf": 1.699999999999928,
+          "win_rate": 0.9361702127659575
+        },
+        "NEUTRAL": {
+          "n": 294,
+          "expectancy": 1.806122448979793e-05,
+          "pf": 1.1641421947449788,
+          "win_rate": 0.891156462585034
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H7",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T09:30:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17383,
+          "sl": 1.17581,
+          "tp": 1.17383,
+          "pnl": 0.000520000000000076,
+          "reason": "TP",
+          "bars_held": 5,
+          "mfe": 0.0011399999999999189,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17497,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H7",
+          "signal_index": 33,
+          "sweep_index": 30,
+          "direction": -1,
+          "entry_time": "2026-01-02T08:30:00+00:00",
+          "exit_time": "2026-01-02T09:30:00+00:00",
+          "entry": 1.17435,
+          "exit": 1.17383,
+          "sl": 1.17581,
+          "tp": 1.17383,
+          "pnl": 0.000520000000000076,
+          "reason": "TP",
+          "bars_held": 5,
+          "mfe": 0.0011399999999999189,
+          "mae": 0.00034000000000000696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.17532,
+          "pierce_atr": 0.7958723041747158,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 4.522001728267658,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 8
+        },
+        {
+          "hypothesis": "H7",
+          "signal_index": 51,
+          "sweep_index": 48,
+          "direction": 1,
+          "entry_time": "2026-01-02T13:00:00+00:00",
+          "exit_time": "2026-01-02T17:15:00+00:00",
+          "entry": 1.17209,
+          "exit": 1.17372,
+          "sl": 1.1714699999999998,
+          "tp": 1.17372,
+          "pnl": 0.0016300000000000203,
+          "reason": "TP",
+          "bars_held": 18,
+          "mfe": 0.0016699999999998383,
+          "mae": 0.0005800000000000249,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "H4",
+          "zone_level": 1.17193,
+          "pierce_atr": 1.1709429010168817,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 0.9163900964478633,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "RANGE",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 13
+        },
+        {
+          "hypothesis": "H7",
+          "signal_index": 16439,
+          "sweep_index": 16436,
+          "direction": -1,
+          "entry_time": "2026-08-31T14:00:00+00:00",
+          "exit_time": "2026-08-31T14:00:00+00:00",
+          "entry": 1.15972,
+          "exit": 1.15966,
+          "sl": 1.16026,
+          "tp": 1.15966,
+          "pnl": 6.000000000017103e-05,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.000140000000000029,
+          "mae": 0.00025999999999992696,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16011,
+          "pierce_atr": 0.8117234419411694,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 0.9508760319880799,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 14
+        },
+        {
+          "hypothesis": "H7",
+          "signal_index": 16444,
+          "sweep_index": 16441,
+          "direction": -1,
+          "entry_time": "2026-08-31T15:15:00+00:00",
+          "exit_time": "2026-08-31T15:15:00+00:00",
+          "entry": 1.15982,
+          "exit": 1.15975,
+          "sl": 1.1603400000000001,
+          "tp": 1.15975,
+          "pnl": 7.00000000000145e-05,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.000400000000000178,
+          "mae": 0.00018999999999991246,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16021,
+          "pierce_atr": 1.0421454738128395,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "MODERATE_DISPLACEMENT",
+          "displacement_run_atr": 0.9474049761933947,
+          "structure_break": "",
+          "htf_aligned": false,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 15
+        },
+        {
+          "hypothesis": "H7",
+          "signal_index": 16449,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T16:30:00+00:00",
+          "exit_time": "2026-08-31T16:30:00+00:00",
+          "entry": 1.15999,
+          "exit": 1.16005,
+          "sl": 1.1591099999999999,
+          "tp": 1.16005,
+          "pnl": 5.999999999994898e-05,
+          "reason": "TP",
+          "bars_held": 1,
+          "mfe": 0.00011999999999989797,
+          "mae": 0.00048000000000003595,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "OPPOSITE_LIQUIDITY",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 16
+        }
+      ]
+    },
+    "H8": {
+      "hypothesis": {
+        "id": "H8",
+        "title": "Full combination (sweep + displacement + BOS + EMA13 + MTF)",
+        "components": [
+          "sweep",
+          "displacement",
+          "BOS",
+          "EMA13",
+          "MTF"
+        ],
+        "min_sweep_class": "CONFIRMED",
+        "require_displacement_at_least": "MODERATE_DISPLACEMENT",
+        "require_bos_window": 6,
+        "require_bos_kinds": [
+          "BOS",
+          "CHOCH"
+        ],
+        "require_ema13_close": true,
+        "require_htf_zone": false,
+        "require_htf_trend_align": true,
+        "sl_mode": "SWEEP_EXTREME",
+        "tp_mode": "FIXED_RR",
+        "rr": 2.0
+      },
+      "n_total": 153,
+      "funnel": {
+        "sweeps_in": 4256,
+        "skip_class": 1036,
+        "skip_htf_zone": 0,
+        "skip_displacement": 2479,
+        "skip_bos": 414,
+        "skip_ema13": 8,
+        "skip_htf_align": 166,
+        "skip_tail": 0,
+        "skip_sl": 0,
+        "skip_no_tp": 0,
+        "skip_sim": 0,
+        "built": 153
+      },
+      "diagnostics_posthoc": {
+        "posthoc_not_preregistered": true,
+        "total_pnl_all_splits": 0.05138999999999694,
+        "train_pf": 1.2064085447262698,
+        "validation_pf": 1.9789251844045006,
+        "holdout_pf": 1.5578947368419795,
+        "flag": "no early-split concern"
+      },
+      "split_boundaries": {
+        "t0": "2026-01-19T10:15:00+00:00",
+        "train_end": "2026-06-03T00:03:00+00:00",
+        "validation_end": "2026-07-17T20:39:00+00:00",
+        "oos_end": "2026-08-09T06:57:00+00:00",
+        "t1": "2026-08-31T17:15:00+00:00"
+      },
+      "splits": {
+        "train": {
+          "n": 106,
+          "wins": 42,
+          "losses": 64,
+          "win_rate": 0.39622641509433965,
+          "expectancy": 0.00021877358490563983,
+          "gross_profit": 0.13554000000000466,
+          "gross_loss": 0.11235000000000683,
+          "profit_factor": 1.2064085447262698,
+          "payoff": 1.8383368300590777,
+          "max_drawdown": 0.03835000000000255,
+          "avg_mfe": 0.00212801886792452,
+          "avg_mae": 0.0017398113207547214,
+          "avg_bars_held": 41.839622641509436,
+          "sl_exits": 55,
+          "tp_exits": 28,
+          "time_exits": 23,
+          "expectancy_ci95": [
+            -0.0002690754716981321,
+            0.0007559221698113181
+          ],
+          "expectancy_usd_001lot": 0.21877358490563983
+        },
+        "validation": {
+          "n": 27,
+          "wins": 11,
+          "losses": 16,
+          "win_rate": 0.4074074074074074,
+          "expectancy": 0.000688148148148125,
+          "gross_profit": 0.03756000000000137,
+          "gross_loss": 0.018980000000001995,
+          "profit_factor": 1.9789251844045006,
+          "payoff": 2.878436631861092,
+          "max_drawdown": 0.00863000000000036,
+          "avg_mfe": 0.002112592592592608,
+          "avg_mae": 0.0012244444444444477,
+          "avg_bars_held": 34.074074074074076,
+          "sl_exits": 16,
+          "tp_exits": 9,
+          "time_exits": 2,
+          "expectancy_ci95": [
+            -0.00019707407407411505,
+            0.0015926481481481779
+          ],
+          "expectancy_usd_001lot": 0.6881481481481251
+        },
+        "oos": {
+          "n": 9,
+          "wins": 6,
+          "losses": 3,
+          "win_rate": 0.6666666666666666,
+          "expectancy": 0.0006566666666667004,
+          "gross_profit": 0.008500000000000618,
+          "gross_loss": 0.0025900000000003143,
+          "profit_factor": 3.2818532818531225,
+          "payoff": 1.6409266409265613,
+          "max_drawdown": 0.0019100000000003003,
+          "avg_mfe": 0.002392222222222228,
+          "avg_mae": 0.000977777777777744,
+          "avg_bars_held": 57.0,
+          "sl_exits": 3,
+          "tp_exits": 3,
+          "time_exits": 3,
+          "expectancy_ci95": [
+            -0.00012783333333335592,
+            0.0014244444444445005
+          ],
+          "expectancy_usd_001lot": 0.6566666666667005
+        },
+        "holdout": {
+          "n": 11,
+          "wins": 5,
+          "losses": 6,
+          "win_rate": 0.45454545454545453,
+          "expectancy": 0.000337272727272676,
+          "gross_profit": 0.010359999999999925,
+          "gross_loss": 0.006650000000000489,
+          "profit_factor": 1.5578947368419795,
+          "payoff": 1.8694736842103752,
+          "max_drawdown": 0.003610000000000335,
+          "avg_mfe": 0.0012327272727272944,
+          "avg_mae": 0.0008290909090908904,
+          "avg_bars_held": 23.818181818181817,
+          "sl_exits": 6,
+          "tp_exits": 3,
+          "time_exits": 2,
+          "expectancy_ci95": [
+            -0.0006354545454545915,
+            0.001260045454545432
+          ],
+          "expectancy_usd_001lot": 0.337272727272676
+        }
+      },
+      "walk_forward": {
+        "folds": [
+          {
+            "fold": "fold1",
+            "n": 21,
+            "expectancy": -0.001390476190476291,
+            "pf": 0.09569526169092075
+          },
+          {
+            "fold": "fold2",
+            "n": 19,
+            "expectancy": -0.00043315789473686336,
+            "pf": 0.6189814814814913
+          },
+          {
+            "fold": "fold3",
+            "n": 15,
+            "expectancy": 0.001035999999999963,
+            "pf": 2.4536950420952315
+          },
+          {
+            "fold": "fold4",
+            "n": 13,
+            "expectancy": 0.0007407692307692499,
+            "pf": 3.260563380281432
+          }
+        ],
+        "positive": 2,
+        "valid": 4
+      },
+      "controls": {
+        "random_direction": {
+          "mean_expectancy": -9.948486456494019e-05,
+          "p95_expectancy": 0.0005585350520586717,
+          "share_draws_ge_real": 0.0,
+          "draws": 100
+        },
+        "random_eligible_entry": {
+          "mean_expectancy": -1.0687490993076391e-06,
+          "p95_expectancy": 0.0008827950350315483,
+          "share_draws_ge_real": 0.11,
+          "draws": 100
+        }
+      },
+      "control_max_expectancy": -1.0687490993076391e-06,
+      "verdict": "EDGE NOT FOUND",
+      "verdict_reasons": [
+        "OOS n=9 < 30",
+        "95% CI of OOS expectancy includes/below 0: (-0.00012783333333335592, 0.0014244444444445005)",
+        "walk-forward stability 2/4 < 75%"
+      ],
+      "by_regime": {
+        "DOWNTREND": {
+          "n": 16,
+          "expectancy": 0.0003125000000000072,
+          "pf": 1.2548419979612588,
+          "win_rate": 0.4375
+        },
+        "RANGE": {
+          "n": 31,
+          "expectancy": 0.00018064516129030268,
+          "pf": 1.2015838732901007,
+          "win_rate": 0.41935483870967744
+        },
+        "STRONG_DOWNTREND": {
+          "n": 59,
+          "expectancy": 0.0003433898305084435,
+          "pf": 1.3930927435001337,
+          "win_rate": 0.3898305084745763
+        },
+        "STRONG_UPTREND": {
+          "n": 32,
+          "expectancy": 0.0006499999999999978,
+          "pf": 1.764144011755996,
+          "win_rate": 0.46875
+        },
+        "UPTREND": {
+          "n": 15,
+          "expectancy": -1.8000000000043907e-05,
+          "pf": 0.981263011797319,
+          "win_rate": 0.4
+        }
+      },
+      "by_displacement": {
+        "MODERATE_DISPLACEMENT": {
+          "n": 40,
+          "expectancy": 0.0002915000000000001,
+          "pf": 1.3800521512385586,
+          "win_rate": 0.475
+        },
+        "STRONG_DISPLACEMENT": {
+          "n": 113,
+          "expectancy": 0.0003515929203539552,
+          "pf": 1.3615433615433108,
+          "win_rate": 0.39823008849557523
+        }
+      },
+      "by_sweep_trend": {
+        "BEARISH": {
+          "n": 40,
+          "expectancy": -0.0002887500000000154,
+          "pf": 0.7706057596822219,
+          "win_rate": 0.3
+        },
+        "BULLISH": {
+          "n": 44,
+          "expectancy": 0.0003438636363636182,
+          "pf": 1.4053040450039693,
+          "win_rate": 0.4090909090909091
+        },
+        "NEUTRAL": {
+          "n": 69,
+          "expectancy": 0.0006928985507246139,
+          "pf": 1.9039515976553951,
+          "win_rate": 0.4927536231884058
+        }
+      },
+      "sample_trades": [
+        {
+          "hypothesis": "H8",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16409,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H8",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16378,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H8",
+          "signal_index": 1096,
+          "sweep_index": 1092,
+          "direction": -1,
+          "entry_time": "2026-01-19T10:15:00+00:00",
+          "exit_time": "2026-01-19T16:45:00+00:00",
+          "entry": 1.16214,
+          "exit": 1.1641800000000002,
+          "sl": 1.1641800000000002,
+          "tp": 1.1580599999999994,
+          "pnl": -0.002040000000000264,
+          "reason": "SL",
+          "bars_held": 27,
+          "mfe": 0.0010399999999999299,
+          "mae": 0.002120000000000122,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "BUY_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16374,
+          "pierce_atr": 2.246513681074118,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.2303517121454215,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "UPTREND",
+          "volatility": "NORMAL_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H8",
+          "signal_index": 16343,
+          "sweep_index": 16340,
+          "direction": 1,
+          "entry_time": "2026-08-28T14:00:00+00:00",
+          "exit_time": "2026-08-28T16:45:00+00:00",
+          "entry": 1.16491,
+          "exit": 1.1638799999999998,
+          "sl": 1.1638799999999998,
+          "tp": 1.16697,
+          "pnl": -0.0010300000000000864,
+          "reason": "SL",
+          "bars_held": 12,
+          "mfe": 0.00013000000000018552,
+          "mae": 0.0011799999999999589,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.16396,
+          "pierce_atr": 0.9400989922844928,
+          "sweep_trend_before": "NEUTRAL",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.7554625635906422,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 14
+        },
+        {
+          "hypothesis": "H8",
+          "signal_index": 16426,
+          "sweep_index": 16423,
+          "direction": 1,
+          "entry_time": "2026-08-31T10:45:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.1599,
+          "exit": 1.1617,
+          "sl": 1.1584299999999998,
+          "tp": 1.16284,
+          "pnl": 0.0018000000000000238,
+          "reason": "TIME",
+          "bars_held": 54,
+          "mfe": 0.0021800000000000708,
+          "mae": 0.0007399999999999629,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.15856,
+          "pierce_atr": 1.2926071433517936,
+          "sweep_trend_before": "BEARISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 2.9011849217446124,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 10
+        },
+        {
+          "hypothesis": "H8",
+          "signal_index": 16452,
+          "sweep_index": 16446,
+          "direction": 1,
+          "entry_time": "2026-08-31T17:15:00+00:00",
+          "exit_time": "2026-09-01T00:00:00+00:00",
+          "entry": 1.16012,
+          "exit": 1.1617,
+          "sl": 1.1591099999999999,
+          "tp": 1.1621400000000004,
+          "pnl": 0.0015799999999999148,
+          "reason": "TIME",
+          "bars_held": 28,
+          "mfe": 0.0019599999999999618,
+          "mae": 0.00012000000000012001,
+          "sl_mode": "SWEEP_EXTREME",
+          "tp_mode": "FIXED_RR",
+          "sweep_class": "CONFIRMED",
+          "zone_type": "SELL_SIDE",
+          "zone_timeframe": "M15",
+          "zone_level": 1.1593,
+          "pierce_atr": 1.1889088560066885,
+          "sweep_trend_before": "BULLISH",
+          "displacement": "STRONG_DISPLACEMENT",
+          "displacement_run_atr": 1.3683667965356334,
+          "structure_break": "CHOCH",
+          "htf_aligned": true,
+          "regime": "STRONG_DOWNTREND",
+          "volatility": "LOW_VOLATILITY",
+          "entry_hour": 17
+        }
+      ]
+    }
+  },
+  "displacement_tuning": {
+    "H2": {
+      "chosen_index": 2,
+      "chosen_params": {
+        "weak_atr": 0.8,
+        "moderate_atr": 1.2,
+        "strong_atr": 2.0,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 462,
+          "train_expectancy": 0.0001980952380952507
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 366,
+          "train_expectancy": 0.00021398907103826518
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 284,
+          "train_expectancy": 0.00023471830985917583
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H3": {
+      "chosen_index": 2,
+      "chosen_params": {
+        "weak_atr": 0.8,
+        "moderate_atr": 1.2,
+        "strong_atr": 2.0,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 202,
+          "train_expectancy": 0.00021752475247523588
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 177,
+          "train_expectancy": 0.00020519774011297753
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 156,
+          "train_expectancy": 0.0002745512820512616
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H4": {
+      "chosen_index": 2,
+      "chosen_params": {
+        "weak_atr": 0.8,
+        "moderate_atr": 1.2,
+        "strong_atr": 2.0,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 195,
+          "train_expectancy": 0.00019764102564101093
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 172,
+          "train_expectancy": 0.00017767441860463133
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 151,
+          "train_expectancy": 0.0002454966887416979
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H5": {
+      "chosen_index": 0,
+      "chosen_params": {
+        "weak_atr": 0.6,
+        "moderate_atr": 0.8,
+        "strong_atr": 1.2,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 35,
+          "train_expectancy": -0.00038771428571430074
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 23,
+          "train_expectancy": -0.00041086956521743775
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 13,
+          "train_expectancy": -0.00036230769230769167
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H6": {
+      "chosen_index": 0,
+      "chosen_params": {
+        "weak_atr": 0.6,
+        "moderate_atr": 0.8,
+        "strong_atr": 1.2,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 108,
+          "train_expectancy": 0.00017583333333331334
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 92,
+          "train_expectancy": 0.00010065217391301744
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 84,
+          "train_expectancy": 5.238095238092018e-05
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H7": {
+      "chosen_index": 0,
+      "chosen_params": {
+        "weak_atr": 0.6,
+        "moderate_atr": 0.8,
+        "strong_atr": 1.2,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 462,
+          "train_expectancy": 9.218614718614409e-05
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 366,
+          "train_expectancy": 5.456284153004809e-05
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 284,
+          "train_expectancy": 4.89436619718256e-05
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    },
+    "H8": {
+      "chosen_index": 0,
+      "chosen_params": {
+        "weak_atr": 0.6,
+        "moderate_atr": 0.8,
+        "strong_atr": 1.2,
+        "window": 3,
+        "min_dir_candles": 2
+      },
+      "trials": [
+        {
+          "grid_index": 0,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 0.8,
+            "strong_atr": 1.2,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 106,
+          "train_expectancy": 0.00021877358490563983
+        },
+        {
+          "grid_index": 1,
+          "params": {
+            "weak_atr": 0.6,
+            "moderate_atr": 1.0,
+            "strong_atr": 1.6,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 90,
+          "train_expectancy": 0.00014955555555552872
+        },
+        {
+          "grid_index": 2,
+          "params": {
+            "weak_atr": 0.8,
+            "moderate_atr": 1.2,
+            "strong_atr": 2.0,
+            "window": 3,
+            "min_dir_candles": 2
+          },
+          "train_n": 82,
+          "train_expectancy": 0.00010487804878045459
+        }
+      ],
+      "selection_rule": "max TRAIN expectancy among grid candidates with >= 15 TRAIN trades; ties -> default params"
+    }
+  },
+  "ablations": {
+    "A1": {
+      "base_hypothesis": "H2",
+      "variant_field": "sl_mode",
+      "report_only": true,
+      "note": "Ablation: aucune variante n'est adoptée automatiquement (spec §9-§10).",
+      "variants": {
+        "SWEEP_EXTREME": {
+          "n_total": 458,
+          "overall": {
+            "n": 458,
+            "wins": 178,
+            "losses": 280,
+            "win_rate": 0.388646288209607,
+            "expectancy": 0.0002432969432314496,
+            "gross_profit": 0.4992800000000306,
+            "gross_loss": 0.3878500000000267,
+            "profit_factor": 1.2873017919298602,
+            "payoff": 2.0249691109009036,
+            "max_drawdown": 0.03458000000000272,
+            "avg_mfe": 0.0019358296943231415,
+            "avg_mae": 0.0013878820960698667,
+            "avg_bars_held": 33.49126637554585,
+            "sl_exits": 261,
+            "tp_exits": 149,
+            "time_exits": 48,
+            "expectancy_ci95": [
+              2.57598253275152e-05,
+              0.0004528018558952068
+            ],
+            "expectancy_usd_001lot": 0.2432969432314496
+          },
+          "oos": {
+            "n": 40,
+            "wins": 14,
+            "losses": 26,
+            "win_rate": 0.35,
+            "expectancy": 6.849999999999912e-05,
+            "gross_profit": 0.028090000000002613,
+            "gross_loss": 0.025350000000002648,
+            "profit_factor": 1.1080867850098493,
+            "payoff": 2.0578754578754346,
+            "max_drawdown": 0.005890000000000617,
+            "avg_mfe": 0.0013359999999999928,
+            "avg_mae": 0.0010705000000000076,
+            "avg_bars_held": 31.325,
+            "sl_exits": 24,
+            "tp_exits": 10,
+            "time_exits": 6,
+            "expectancy_ci95": [
+              -0.00042551249999998094,
+              0.0005726750000000309
+            ],
+            "expectancy_usd_001lot": 0.06849999999999912
+          },
+          "funnel": {
+            "note": "identique au build H2 de base"
+          }
+        },
+        "ENTRY_SIGNAL_CANDLE": {
+          "n_total": 456,
+          "overall": {
+            "n": 456,
+            "wins": 151,
+            "losses": 305,
+            "win_rate": 0.33114035087719296,
+            "expectancy": 1.6403508771930647e-05,
+            "gross_profit": 0.18784000000003198,
+            "gross_loss": 0.1803600000000316,
+            "profit_factor": 1.0414726103348806,
+            "payoff": 2.103636729484361,
+            "max_drawdown": 0.02603000000000133,
+            "avg_mfe": 0.0007799999999999922,
+            "avg_mae": 0.0006347807017543807,
+            "avg_bars_held": 6.135964912280702,
+            "sl_exits": 304,
+            "tp_exits": 150,
+            "time_exits": 2,
+            "expectancy_ci95": [
+              -8.255537280702861e-05,
+              0.00011679989035088573
+            ],
+            "expectancy_usd_001lot": 0.01640350877193065
+          },
+          "oos": {
+            "n": 40,
+            "wins": 12,
+            "losses": 28,
+            "win_rate": 0.3,
+            "expectancy": -6.475000000003006e-05,
+            "gross_profit": 0.012420000000002318,
+            "gross_loss": 0.01501000000000352,
+            "profit_factor": 0.8274483677547905,
+            "payoff": 1.930712858094511,
+            "max_drawdown": 0.008630000000001026,
+            "avg_mfe": 0.0006124999999999936,
+            "avg_mae": 0.0005570000000000075,
+            "avg_bars_held": 8.825,
+            "sl_exits": 28,
+            "tp_exits": 12,
+            "time_exits": 0,
+            "expectancy_ci95": [
+              -0.0003387562500001197,
+              0.00021276875000001672
+            ],
+            "expectancy_usd_001lot": -0.06475000000003006
+          },
+          "funnel": {
+            "sweeps_in": 4256,
+            "skip_class": 1036,
+            "skip_htf_zone": 0,
+            "skip_displacement": 2762,
+            "skip_bos": 0,
+            "skip_ema13": 0,
+            "skip_htf_align": 0,
+            "skip_tail": 0,
+            "skip_sl": 0,
+            "skip_no_tp": 0,
+            "skip_sim": 2,
+            "built": 456
+          }
+        },
+        "STRUCTURE": {
+          "n_total": 455,
+          "overall": {
+            "n": 455,
+            "wins": 176,
+            "losses": 279,
+            "win_rate": 0.3868131868131868,
+            "expectancy": 0.0002763296703296891,
+            "gross_profit": 0.5205900000000332,
+            "gross_loss": 0.39486000000002464,
+            "profit_factor": 1.3184166540039526,
+            "payoff": 2.0899900367449025,
+            "max_drawdown": 0.03649000000000324,
+            "avg_mfe": 0.0020342197802197806,
+            "avg_mae": 0.0014401098901098894,
+            "avg_bars_held": 35.09230769230769,
+            "sl_exits": 259,
+            "tp_exits": 146,
+            "time_exits": 50,
+            "expectancy_ci95": [
+              5.487527472528002e-05,
+              0.0004982115384615691
+            ],
+            "expectancy_usd_001lot": 0.27632967032968914
+          },
+          "oos": {
+            "n": 40,
+            "wins": 18,
+            "losses": 22,
+            "win_rate": 0.45,
+            "expectancy": 0.00042000000000004257,
+            "gross_profit": 0.037320000000003795,
+            "gross_loss": 0.020520000000002092,
+            "profit_factor": 1.8187134502923972,
+            "payoff": 2.2228719948018187,
+            "max_drawdown": 0.004580000000000695,
+            "avg_mfe": 0.0015877499999999989,
+            "avg_mae": 0.0010595000000000077,
+            "avg_bars_held": 35.0,
+            "sl_exits": 19,
+            "tp_exits": 13,
+            "time_exits": 8,
+            "expectancy_ci95": [
+              -8.28749999999776e-05,
+              0.0009270125000000841
+            ],
+            "expectancy_usd_001lot": 0.42000000000004256
+          },
+          "funnel": {
+            "sweeps_in": 4256,
+            "skip_class": 1036,
+            "skip_htf_zone": 0,
+            "skip_displacement": 2762,
+            "skip_bos": 0,
+            "skip_ema13": 0,
+            "skip_htf_align": 0,
+            "skip_tail": 0,
+            "skip_sl": 0,
+            "skip_no_tp": 0,
+            "skip_sim": 3,
+            "built": 455
+          }
+        },
+        "ATR_BASED": {
+          "n_total": 458,
+          "overall": {
+            "n": 458,
+            "wins": 163,
+            "losses": 295,
+            "win_rate": 0.3558951965065502,
+            "expectancy": 8.246726946403134e-05,
+            "gross_profit": 0.31837600024022494,
+            "gross_loss": 0.2806059908256986,
+            "profit_factor": 1.134601578902097,
+            "payoff": 2.0534200354363104,
+            "max_drawdown": 0.031712397038135665,
+            "avg_mfe": 0.0012262008733624418,
+            "avg_mae": 0.0009499344978165892,
+            "avg_bars_held": 15.013100436681222,
+            "sl_exits": 295,
+            "tp_exits": 163,
+            "time_exits": 0,
+            "expectancy_ci95": [
+              -5.6762704804264555e-05,
+              0.00021383318442354018
+            ],
+            "expectancy_usd_001lot": 0.08246726946403134
+          },
+          "oos": {
+            "n": 40,
+            "wins": 12,
+            "losses": 28,
+            "win_rate": 0.3,
+            "expectancy": -0.00013198590728933924,
+            "gross_profit": 0.016284214684568532,
+            "gross_loss": 0.0215636509761421,
+            "profit_factor": 0.7551696464845074,
+            "payoff": 1.7620625084638506,
+            "max_drawdown": 0.012229693264691699,
+            "avg_mfe": 0.0008557499999999995,
+            "avg_mae": 0.0007425000000000126,
+            "avg_bars_held": 11.65,
+            "sl_exits": 28,
+            "tp_exits": 12,
+            "time_exits": 0,
+            "expectancy_ci95": [
+              -0.0004449650414069676,
+              0.00019171435489154318
+            ],
+            "expectancy_usd_001lot": -0.13198590728933923
+          },
+          "funnel": {
+            "sweeps_in": 4256,
+            "skip_class": 1036,
+            "skip_htf_zone": 0,
+            "skip_displacement": 2762,
+            "skip_bos": 0,
+            "skip_ema13": 0,
+            "skip_htf_align": 0,
+            "skip_tail": 0,
+            "skip_sl": 0,
+            "skip_no_tp": 0,
+            "skip_sim": 0,
+            "built": 458
+          }
+        }
+      }
+    },
+    "A2": {
+      "base_hypothesis": "H2",
+      "variant_field": "tp_mode",
+      "report_only": true,
+      "note": "Ablation: aucune variante n'est adoptée automatiquement (spec §9-§10).",
+      "variants": {
+        "FIXED_RR": {
+          "n_total": 458,
+          "overall": {
+            "n": 458,
+            "wins": 178,
+            "losses": 280,
+            "win_rate": 0.388646288209607,
+            "expectancy": 0.0002432969432314496,
+            "gross_profit": 0.4992800000000306,
+            "gross_loss": 0.3878500000000267,
+            "profit_factor": 1.2873017919298602,
+            "payoff": 2.0249691109009036,
+            "max_drawdown": 0.03458000000000272,
+            "avg_mfe": 0.0019358296943231415,
+            "avg_mae": 0.0013878820960698667,
+            "avg_bars_held": 33.49126637554585,
+            "sl_exits": 261,
+            "tp_exits": 149,
+            "time_exits": 48,
+            "expectancy_ci95": [
+              2.57598253275152e-05,
+              0.0004528018558952068
+            ],
+            "expectancy_usd_001lot": 0.2432969432314496
+          },
+          "oos": {
+            "n": 40,
+            "wins": 14,
+            "losses": 26,
+            "win_rate": 0.35,
+            "expectancy": 6.849999999999912e-05,
+            "gross_profit": 0.028090000000002613,
+            "gross_loss": 0.025350000000002648,
+            "profit_factor": 1.1080867850098493,
+            "payoff": 2.0578754578754346,
+            "max_drawdown": 0.005890000000000617,
+            "avg_mfe": 0.0013359999999999928,
+            "avg_mae": 0.0010705000000000076,
+            "avg_bars_held": 31.325,
+            "sl_exits": 24,
+            "tp_exits": 10,
+            "time_exits": 6,
+            "expectancy_ci95": [
+              -0.00042551249999998094,
+              0.0005726750000000309
+            ],
+            "expectancy_usd_001lot": 0.06849999999999912
+          },
+          "funnel": {
+            "note": "identique au build H2 de base"
+          }
+        },
+        "OPPOSITE_LIQUIDITY": {
+          "n_total": 458,
+          "overall": {
+            "n": 458,
+            "wins": 423,
+            "losses": 35,
+            "win_rate": 0.9235807860262009,
+            "expectancy": 3.29039301310037e-05,
+            "gross_profit": 0.0552400000000024,
+            "gross_loss": 0.040170000000002704,
+            "profit_factor": 1.3751555887477889,
+            "payoff": 0.11378355935265393,
+            "max_drawdown": 0.005850000000000133,
+            "avg_mfe": 0.0004147816593886438,
+            "avg_mae": 0.0004285589519650626,
+            "avg_bars_held": 1.8056768558951966,
+            "sl_exits": 35,
+            "tp_exits": 423,
+            "time_exits": 0,
+            "expectancy_ci95": [
+              -1.0378820960703899e-05,
+              7.217194323144205e-05
+            ],
+            "expectancy_usd_001lot": 0.0329039301310037
+          },
+          "oos": {
+            "n": 40,
+            "wins": 34,
+            "losses": 6,
+            "win_rate": 0.85,
+            "expectancy": -6.700000000000594e-05,
+            "gross_profit": 0.0026700000000001722,
+            "gross_loss": 0.00535000000000041,
+            "profit_factor": 0.4990654205607416,
+            "payoff": 0.08807036833424851,
+            "max_drawdown": 0.004010000000000069,
+            "avg_mfe": 0.00023349999999999204,
+            "avg_mae": 0.00039400000000001657,
+            "avg_bars_held": 1.875,
+            "sl_exits": 6,
+            "tp_exits": 34,
+            "time_exits": 0,
+            "expectancy_ci95": [
+              -0.0001845249999999995,
+              3.050000000000566e-05
+            ],
+            "expectancy_usd_001lot": -0.06700000000000594
+          },
+          "funnel": {
+            "sweeps_in": 4256,
+            "skip_class": 1036,
+            "skip_htf_zone": 0,
+            "skip_displacement": 2762,
+            "skip_bos": 0,
+            "skip_ema13": 0,
+            "skip_htf_align": 0,
+            "skip_tail": 0,
+            "skip_sl": 0,
+            "skip_no_tp": 0,
+            "skip_sim": 0,
+            "built": 458
+          }
+        },
+        "TIME_EXIT": {
+          "n_total": 458,
+          "overall": {
+            "n": 458,
+            "wins": 144,
+            "losses": 314,
+            "win_rate": 0.314410480349345,
+            "expectancy": 0.0002740174672488369,
+            "gross_profit": 0.5517299999999974,
+            "gross_loss": 0.4262300000000301,
+            "profit_factor": 1.294441967951478,
+            "payoff": 2.822602624560862,
+            "max_drawdown": 0.05394000000000654,
+            "avg_mfe": 0.0026509606986899587,
+            "avg_mae": 0.0015285152838427946,
+            "avg_bars_held": 49.98471615720524,
+            "sl_exits": 293,
+            "tp_exits": 0,
+            "time_exits": 165,
+            "expectancy_ci95": [
+              2.379366812157881e-06,
+              0.0005560338427946929
+            ],
+            "expectancy_usd_001lot": 0.2740174672488369
+          },
+          "oos": {
+            "n": 40,
+            "wins": 11,
+            "losses": 29,
+            "win_rate": 0.275,
+            "expectancy": 4.874999999992524e-05,
+            "gross_profit": 0.03090000000000015,
+            "gross_loss": 0.02895000000000314,
+            "profit_factor": 1.0673575129532573,
+            "payoff": 2.8139425341494966,
+            "max_drawdown": 0.01090000000000102,
+            "avg_mfe": 0.0018010000000000027,
+            "avg_mae": 0.0011632500000000102,
+            "avg_bars_held": 42.675,
+            "sl_exits": 27,
+            "tp_exits": 0,
+            "time_exits": 13,
+            "expectancy_ci95": [
+              -0.000610500000000075,
+              0.0008927562499999313
+            ],
+            "expectancy_usd_001lot": 0.04874999999992524
+          },
+          "funnel": {
+            "sweeps_in": 4256,
+            "skip_class": 1036,
+            "skip_htf_zone": 0,
+            "skip_displacement": 2762,
+            "skip_bos": 0,
+            "skip_ema13": 0,
+            "skip_htf_align": 0,
+            "skip_tail": 0,
+            "skip_sl": 0,
+            "skip_no_tp": 0,
+            "skip_sim": 0,
+            "built": 458
+          }
+        }
+      }
+    }
+  },
+  "baseline_current_engine": {
+    "available": true,
+    "source": "backtests\\reports\\trades.csv",
+    "n": 49,
+    "expectancy": 0.0010293877551021183,
+    "expectancy_usd_001lot": 1.0293877551021182,
+    "win_rate": 0.5510204081632653,
+    "note": "Référence informative : moteur courant avec filtres session/jour, échantillon et période différents — pas un contrôle équivalent."
+  },
+  "dataset": {
+    "built": true,
+    "rows": 16481,
+    "columns": [
+      "range",
+      "body",
+      "upper_wick",
+      "lower_wick",
+      "atr",
+      "atr_pct",
+      "rsi",
+      "ema13",
+      "ema200",
+      "ema13_slope",
+      "macd_hist",
+      "momentum",
+      "rolling_high_20",
+      "rolling_low_20",
+      "volume",
+      "spread",
+      "hour",
+      "weekday",
+      "regime",
+      "volatility_regime",
+      "nearest_buy_liquidity",
+      "nearest_sell_liquidity",
+      "dist_to_buy_liquidity",
+      "dist_to_sell_liquidity",
+      "liquidity_swept",
+      "sweep_side",
+      "sweep_class",
+      "sweep_strength_atr",
+      "displacement_strength",
+      "structure_event",
+      "future_return",
+      "mfe_long",
+      "mae_long",
+      "hit_stop",
+      "hit_target"
+    ],
+    "path": "research\\datasets\\observations_eurusd_m15.csv"
+  },
+  "notes": [
+    "Module strictement parallèle : app/research n'est importé par aucun code live (app.main / TradingEngine / SignalEngine inchangés).",
+    "Aucune hypothèse n'est déployée automatiquement : un verdict CANDIDATE exige revue du holdout + approbation manuelle (spec §12 : MODEL VERSION, rollback).",
+    "§19 binaires : N/A — ce bot exécute du spot MT5. formule BE_WR = LOSS/(WIN+LOSS) disponible dans app.research.evaluation.breakeven_wr pour tout usage futur.",
+    "Périodes d'entrée multi-TF : M15 (sweep/displacement/BOS/EMA13) + H4 (liquidité HTF, alignement). M5/H1 non disponibles sans pause de la boucle live (connexion MT5 exclusive) — expériences LTF reportées (spec §6).",
+    "Seuils de displacement : grille pré-enregistrée, sélection sur TRAIN uniquement, figée avant validation/OOS/holdout (spec §4).",
+    "Contrôles : RANDOM_DIRECTION (mêmes entrées, côté au hasard, stop ATR + 2R) et RANDOM_ELIGIBLE_ENTRY (dates au hasard dans l'ensemble éligible, mêmes règles neutres) ; BASELINE_CURRENT_ENGINE en référence informative. Ces contrôles utilisent un stop ATR neutre : battre RANDOM_DIRECTION avec un stop SWEEP_EXTREME peut refléter la qualité du placement de stop autant que celle du timing de direction.",
+    "Diagnostics marqués « post-hoc » (somme PnL tous splits, PF train/validation) ne font PAS partie de la politique de verdict pré-enregistrée — ils informent la décision humaine sans la remplacer.",
+    "Ablation H7 (post-hoc) : OPPOSITE_LIQUIDITY n'imposait qu'une distance minimale de 5 points à la cible → cibles quasi immédiates, WR ~90% mais PF OOS < 1. Toute révision (ex. distance min ≥ 1×ATR) devra être pré-enregistrée AVANT retest.",
+    "Chevauchement de positions : ce backtest, comme le moteur, autorise les trades superposés alors que le live est à max_open_positions=1 — le sous-ensemble réalisable en live est plus petit que n_total.",
+    "Composants reportés (non implémentés cette phase, par design contrôlé) : memory/similarité §14, drift §16, online learning §15, registre de modèles §12, sorties PARTIAL/RUNNER §10, régimes par symbole/session §13 (cellules trop petites sur un seul symètre — reportés).",
+    "Métriques en unités de prix EURUSD ; conversion indicative USD @0,01 lot = prix × 1000 (spread et latence non inclus).",
+    "Échantillons : un verdict de déploiement exige n_OOS ≥ 30, IC95 > 0, PF > 1, supériorité sur les deux contrôles et stabilité walk-forward ≥ 75%."
+  ]
+}
