@@ -2,8 +2,9 @@ import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+# C'est cette ligne exacte que Gunicorn cherche :
 app = Flask(__name__)
-CORS(app)  # Permet à l'interface Lovable de lire l'API
+CORS(app)
 
 dernier_signal = {
     "action": "NONE",
@@ -25,7 +26,7 @@ def process_tick():
     data = request.get_json()
 
     if not data or 'ask' not in data or 'bid' not in data:
-        return jsonify({"status": "error", "message": "Donnes incompletes"}), 400
+        return jsonify({"status": "error", "message": "Donnees incompletes"}), 400
 
     ask = float(data['ask'])
     bid = float(data['bid'])
