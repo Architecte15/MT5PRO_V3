@@ -13,7 +13,6 @@ DB_FILE = "trading_data.db"
 model = RandomForestClassifier(n_estimators=100, random_state=42)
 is_model_trained = False
 
-# Initialisation de la base de données
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
@@ -32,14 +31,12 @@ def init_db():
 
 init_db()
 
-# Entraînement du modèle
 def train_model():
     global model, is_model_trained
     conn = sqlite3.connect(DB_FILE)
     df = pd.read_sql_query("SELECT ask, bid, high_prev, low_prev, spread, target FROM ticks", conn)
     conn.close()
 
-    # Se réentraîne s'il y a au moins 50 enregistrements et plus d'une classe disponible
     if len(df) >= 50 and df['target'].nunique() > 1:
         X = df[['ask', 'bid', 'high_prev', 'low_prev', 'spread']]
         y = df['target']
@@ -50,7 +47,7 @@ def train_model():
 def home():
     return jsonify({
         "status": "online",
-        "system": "MTSPRO_V3 AI Scalper",
+        "system": "MTSPRO_V3 AI Scalper XAUUSD M1",
         "model_trained": is_model_trained
     })
 
@@ -68,10 +65,9 @@ def process_tick():
     low_prev = float(data.get('low_prev', 0))
     spread = ask - bid
 
-    # Label basé sur la cassure du momentum
+    # Label basé sur le dépassement du range précédent
     target = 1 if (ask > high_prev and high_prev > 0) else (2 if (bid < low_prev and low_prev > 0) else 0)
 
-    # Stockage en base de données
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
     c.execute("INSERT INTO ticks (ask, bid, high_prev, low_prev, spread, target) VALUES (?, ?, ?, ?, ?, ?)",
@@ -79,7 +75,6 @@ def process_tick():
     conn.commit()
     conn.close()
 
-    # Tentative d'entraînement
     try:
         train_model()
     except Exception:
@@ -87,7 +82,6 @@ def process_tick():
 
     action = "NONE"
 
-    # Prédiction avec l'IA
     if is_model_trained:
         features = pd.DataFrame([{
             'ask': ask,
@@ -102,7 +96,6 @@ def process_tick():
         elif pred == 2:
             action = "SELL"
     else:
-        # Stratégie de repli avant l'entraînement complet
         if ask >= high_prev and high_prev > 0:
             action = "BUY"
         elif bid <= low_prev and low_prev > 0:
