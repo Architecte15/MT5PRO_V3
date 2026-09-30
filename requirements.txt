@@ -6,5 +6,8 @@ matplotlib>=3.8
 pytest>=8.0
 streamlit>=1.35
 plotly>=5.20
-# MT5 is required only for live execution on supported Windows environments.
+# MT5 is required only for live execution on supported platforms
 MetaTrader5>=5.0.45; platform_system == "Windows"
+gunicorn
+flask
+flask-cors
