@@ -1,7 +1,6 @@
 import os
 import sqlite3
 import pandas as pd
-import numpy as np
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from sklearn.ensemble import RandomForestClassifier
@@ -10,8 +9,9 @@ app = Flask(__name__)
 CORS(app)
 
 DB_FILE = "trading_data.db"
-model = RandomForestClassifier(n_estimators=100, random_state=42)
+model = RandomForestClassifier(n_estimators=30, max_depth=5, random_state=42)
 is_model_trained = False
+last_price = 0.0
 
 def init_db():
     conn = sqlite3.connect(DB_FILE)
@@ -19,96 +19,47 @@ def init_db():
     c.execute('''CREATE TABLE IF NOT EXISTS ticks (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    ask REAL,
-                    bid REAL,
-                    high_prev REAL,
-                    low_prev REAL,
-                    spread REAL,
-                    target INTEGER DEFAULT 0
+                    ask REAL, bid REAL, spread REAL, tick_delta REAL, target INTEGER DEFAULT 0
                 )''')
     conn.commit()
     conn.close()
 
 init_db()
 
-def train_model():
-    global model, is_model_trained
-    conn = sqlite3.connect(DB_FILE)
-    df = pd.read_sql_query("SELECT ask, bid, high_prev, low_prev, spread, target FROM ticks", conn)
-    conn.close()
-
-    if len(df) >= 50 and df['target'].nunique() > 1:
-        X = df[['ask', 'bid', 'high_prev', 'low_prev', 'spread']]
-        y = df['target']
-        model.fit(X, y)
-        is_model_trained = True
-
-@app.route('/', methods=['GET'])
-def home():
-    return jsonify({
-        "status": "online",
-        "system": "MTSPRO_V3 AI Scalper XAUUSD M1",
-        "model_trained": is_model_trained
-    })
-
 @app.route('/api/tick', methods=['POST'])
 def process_tick():
-    global is_model_trained
+    global is_model_trained, last_price
     data = request.get_json()
 
     if not data or 'ask' not in data or 'bid' not in data:
-        return jsonify({"status": "error", "message": "Donnees incompletes"}), 400
+        return jsonify({"status": "error", "message": "Données incomplètes"}), 400
 
     ask = float(data['ask'])
     bid = float(data['bid'])
-    high_prev = float(data.get('high_prev', 0))
-    low_prev = float(data.get('low_prev', 0))
     spread = ask - bid
+    mid_price = (ask + bid) / 2.0
+    
+    # Delta par rapport au dernier tick reçu
+    tick_delta = mid_price - last_price if last_price > 0 else 0.0
+    last_price = mid_price
 
-    # Label basé sur le dépassement du range précédent
-    target = 1 if (ask > high_prev and high_prev > 0) else (2 if (bid < low_prev and low_prev > 0) else 0)
-
-    conn = sqlite3.connect(DB_FILE)
-    c = conn.cursor()
-    c.execute("INSERT INTO ticks (ask, bid, high_prev, low_prev, spread, target) VALUES (?, ?, ?, ?, ?, ?)",
-              (ask, bid, high_prev, low_prev, spread, target))
-    conn.commit()
-    conn.close()
-
-    try:
-        train_model()
-    except Exception:
-        pass
-
+    # Logique Agressive : si la variation de prix dépasse le spread, c'est une impulsion
     action = "NONE"
-
-    if is_model_trained:
-        features = pd.DataFrame([{
-            'ask': ask,
-            'bid': bid,
-            'high_prev': high_prev,
-            'low_prev': low_prev,
-            'spread': spread
-        }])
-        pred = model.predict(features)[0]
-        if pred == 1:
-            action = "BUY"
-        elif pred == 2:
-            action = "SELL"
-    else:
-        if ask >= high_prev and high_prev > 0:
-            action = "BUY"
-        elif bid <= low_prev and low_prev > 0:
-            action = "SELL"
+    
+    # Seuil d'impulsion ultra-sensible (0.05$ sur l'Or)
+    if tick_delta > (spread * 0.5):
+        action = "BUY"
+    elif tick_delta < -(spread * 0.5):
+        action = "SELL"
 
     return jsonify({
         "status": "success",
         "signal": {
             "action": action,
-            "tp_points": 350.0,
-            "sl_points": 150.0
+            "tp_points": 100.0,  # 10 pips / 1$ sur XAUUSD
+            "sl_points": 80.0   # SL serré pour couper direct
         },
-        "model_trained": is_model_trained
+        "tick_delta": round(tick_delta, 3)
     })
 
 if __name__ == '__main__':
