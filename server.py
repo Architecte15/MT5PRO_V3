@@ -1,16 +1,12 @@
 import os
 import sqlite3
-import pandas as pd
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from sklearn.ensemble import RandomForestClassifier
 
 app = Flask(__name__)
 CORS(app)
 
 DB_FILE = "trading_data.db"
-model = RandomForestClassifier(n_estimators=30, max_depth=5, random_state=42)
-is_model_trained = False
 last_price = 0.0
 
 def init_db():
@@ -26,27 +22,39 @@ def init_db():
 
 init_db()
 
+# --- ROUTE RACINE (Pour vérifier que le serveur marche dans le navigateur) ---
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({
+        "status": "online",
+        "message": "Serveur de Scalping XAUUSD opérationnel !",
+        "endpoint": "/api/tick"
+    }), 200
+
+# --- ROUTE DU BOT MT5 ---
 @app.route('/api/tick', methods=['POST'])
 def process_tick():
-    global is_model_trained, last_price
-    data = request.get_json()
+    global last_price
+    
+    # Accepte le format JSON classique ou les données nettoyées
+    data = request.get_json(silent=True) or {}
 
-    if not data or 'ask' not in data or 'bid' not in data:
-        return jsonify({"status": "error", "message": "Données incomplètes"}), 400
+    if 'ask' not in data or 'bid' not in data:
+        return jsonify({"status": "error", "message": "Données ask/bid manquantes"}), 400
 
     ask = float(data['ask'])
     bid = float(data['bid'])
     spread = ask - bid
     mid_price = (ask + bid) / 2.0
     
-    # Delta par rapport au dernier tick reçu
+    # Calcul du delta par rapport au tick précédent
     tick_delta = mid_price - last_price if last_price > 0 else 0.0
     last_price = mid_price
 
-    # Logique Agressive : si la variation de prix dépasse le spread, c'est une impulsion
+    # Logique Agressive Micro-Scalping
     action = "NONE"
     
-    # Seuil d'impulsion ultra-sensible (0.05$ sur l'Or)
+    # Déclenchement dès 0.05$ de mouvement
     if tick_delta > (spread * 0.5):
         action = "BUY"
     elif tick_delta < -(spread * 0.5):
@@ -56,11 +64,11 @@ def process_tick():
         "status": "success",
         "signal": {
             "action": action,
-            "tp_points": 100.0,  # 10 pips / 1$ sur XAUUSD
-            "sl_points": 80.0   # SL serré pour couper direct
+            "tp_points": 60.0,
+            "sl_points": 50.0
         },
         "tick_delta": round(tick_delta, 3)
-    })
+    }), 200
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
